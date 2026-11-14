@@ -54,6 +54,25 @@ try {
   const csp = await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute("content") || "");
   soll("Sicherheitsregel: Verbindungen nur zur eigenen Adresse", /connect-src 'self'/.test(csp) && /default-src 'self'/.test(csp));
 
+  console.log("Kopf: Fassung, Update-Fähnchen, Installieren");
+  const appFassung = JSON.parse(await readFile(join(WURZEL, "package.json"), "utf8")).version;
+  soll("Fassung im Kopf = package.json = version.json", (await page.locator("[data-fassung-knopf]").textContent()) === appFassung && JSON.parse(await readFile(join(WURZEL, "app/version.json"), "utf8")).fassung === appFassung);
+  soll("Kein Update-Fähnchen, solange version.json gleich ist", (await page.locator("[data-update-fahne]").count()) === 0);
+  soll("Installieren-Knopf sichtbar (Web-App, nicht installiert)", await page.locator("[data-installieren]").isVisible());
+  await page.evaluate(() => { const e = new Event("beforeinstallprompt"); e.prompt = async () => {}; e.userChoice = Promise.resolve({ outcome: "accepted" }); dispatchEvent(e); });
+  await page.click("[data-installieren]");
+  await page.waitForTimeout(200);
+  soll("Nach der Installation ist der Knopf weg", (await page.locator("[data-installieren]").count()) === 0);
+  {
+    const p3 = await ctx.newPage();
+    await p3.route("**/version.json*", (r) => r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ fassung: "9.9.9" }) }));
+    await p3.goto(basis); await p3.waitForSelector("[data-update-fahne]", { timeout: 10000 }).catch(() => {});
+    soll("Neue Fassung auf dem Server → Fähnchen „Update 9.9.9“ neben der Fassung", ((await p3.locator("[data-update-fahne]").textContent().catch(() => "")) || "").includes("Update 9.9.9"));
+    await p3.evaluate(() => dispatchEvent(new Event("appinstalled")));
+    soll("„appinstalled“ nimmt den Installieren-Knopf weg", (await p3.locator("[data-installieren]").count()) === 0);
+    await p3.close();
+  }
+
   console.log("Beispiel einlesen");
   await page.click("[data-beispiel]");
   await page.waitForSelector("[data-stueck=D04]", { timeout: 180000 });

@@ -18,10 +18,11 @@ import { beispielDateien } from "./beispiel.ts";
 import * as speicher from "./speicher.ts";
 import { ZIELE, kopieren, bildKopieren, sammelbild, teilen, teilenMoeglich, oeffnen } from "./ki.ts";
 import { herunterladen, dateiname } from "./ordner.ts";
+import { eingangAbholen, eingangLauschen } from "./eingang.ts";
 
-export const FASSUNG = "0.1.0";
-const istNativ = () => !!(window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor?.isNativePlatform?.();
-export const VARIANTE = istNativ() ? "Pro" : "Basic";
+import { APP_VARIANTE as VARIANTE, APP_NAME } from "./nativ.ts";
+import { FASSUNG, KopfKnoepfe } from "./kopf.tsx";
+export { VARIANTE };
 const modul25 = () => (window as unknown as { SbkimPseudonym?: Pseudonymisierer }).SbkimPseudonym;
 
 type Seite = "hin" | "zurueck";
@@ -45,9 +46,10 @@ export function App() {
       <div className="masthead">
         <button type="button" className="site-brand" onClick={() => gehe("hin")} aria-label="PseudoDoc – zum Anfang">
           <Logo groesse={46}/>
-          <span><strong className="pd-name">PseudoDoc <em>{VARIANTE}</em></strong><small>Datei rein · pseudonymisiert zur KI · zurück</small></span>
+          <span><strong className="pd-name" data-app-name={APP_NAME}>PseudoDoc <em>{VARIANTE}</em></strong><small>Datei rein · pseudonymisiert zur KI · zurück</small></span>
         </button>
         <div className="header-actions">
+          <KopfKnoepfe/>
           <Info titel="So geht es" mehr={<>
             <Ablaufbild label="Ablauf" schritte={[{ titel: "Datei rein", unter: "Brief, PDF, Foto, Mail" }, { titel: "Pseudonymisiert", unter: "Namen → ⟦NAME-1⟧, Bilder schwarz" }, { titel: "Zur KI", unter: "ein Klick, dann einfügen", art: "hervor" }, { titel: "Zurück", unter: "echte Angaben wieder drin" }]}/>
             <ul>
@@ -93,6 +95,18 @@ function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
   const urls = useRef(new Map<string, string>());
   const dateiWahl = useRef<HTMLInputElement>(null), ordnerWahl = useRef<HTMLInputElement>(null), kamera = useRef<HTMLInputElement>(null);
   const p = modul25();
+
+  // Pro: Dateien, die an PseudoDoc geteilt oder mit „Öffnen mit“ übergeben wurden, kommen von selbst herein.
+  const einlesenRef = useRef<(e: Eingang[]) => Promise<void>>(async () => {});
+  useEffect(() => {
+    let weg = false;
+    const holen = async () => { for (let i = 0; i < 20 && !weg; i++) { const e = await eingangAbholen().catch(() => []); if (!e.length) break; await einlesenRef.current(e); } };
+    void holen();
+    const sicht = () => { if (document.visibilityState === "visible") void holen(); };
+    document.addEventListener("visibilitychange", sicht);
+    const lauscher = eingangLauschen(() => void holen());
+    return () => { weg = true; document.removeEventListener("visibilitychange", sicht); void lauscher.then((l) => l?.remove?.()); };
+  }, []);
 
   const bildUrl = (k: string, b?: Blob) => { if (!b) return ""; if (!urls.current.has(k)) urls.current.set(k, URL.createObjectURL(b)); return urls.current.get(k)!; };
   const wahlMitId: AuftragWahl = useMemo(() => ({ ...wahl, auftragId }), [wahl, auftragId]);
@@ -146,6 +160,7 @@ function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
     setMeldung({ text: `${neu.length} ${neu.length === 1 ? "Stück" : "Stücke"} pseudonymisiert. Kurz ansehen – dann zur KI.`, art: "gut" });
   }
 
+  einlesenRef.current = einlesen;
   const ausFiles = async (l: FileList | File[]) => einlesen(await Promise.all([...l].map(async (f) => ({ pfad: (f as File & { webkitRelativePath?: string }).webkitRelativePath || f.name, name: f.name, bytes: new Uint8Array(await f.arrayBuffer()) }))));
   async function ausZiehen(dt: DataTransfer) {
     type E = { isFile: boolean; isDirectory: boolean; name: string; fullPath: string; file?: (ok: (f: File) => void, n: (e: unknown) => void) => void; createReader?: () => { readEntries: (ok: (l: E[]) => void, n: (e: unknown) => void) => void } };
