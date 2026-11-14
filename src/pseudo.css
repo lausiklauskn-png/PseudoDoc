@@ -1,0 +1,57 @@
+/* Pseudonymisierer – ergänzt die gemeinsame Gestaltung (styles.css, wie Familienakte). */
+.pseudo-ablage { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 120px; border: 2px dashed #9eb8c8; border-radius: 14px; color: var(--navy); font-weight: 700; padding: 14px; text-align: center; background: var(--canvas); }
+.pseudo-ablage.aktiv { border-color: var(--teal); background: var(--teal-soft); }
+.pseudo-ablage .leise { font-weight: 400; }
+.pseudo-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pseudo-zeile { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: #fff; }
+.pseudo-zeile.aus { opacity: .6; background: var(--canvas); }
+.pseudo-kennung { flex: 0 0 auto; font-weight: 900; color: var(--teal); font-variant-numeric: tabular-nums; }
+.pseudo-name { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.pseudo-name strong { overflow-wrap: anywhere; }
+.pseudo-knoepfe { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.umschalter { display: inline-flex; gap: 4px; align-items: center; font-size: .82rem; color: var(--muted); white-space: nowrap; }
+.unsicher-zeile { font-size: .82rem; color: var(--amber); display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.chip.unsicher { background: var(--amber-soft); border-color: #e2c27d; color: var(--amber); cursor: pointer; }
+.chip.an { background: var(--navy); border-color: var(--navy); color: #fff; }
+button.chip { font-size: .86rem; padding: 6px 12px; cursor: pointer; }
+.korrigieren { margin-top: 14px; }
+.korrigieren summary { cursor: pointer; font-weight: 700; color: var(--navy); }
+.korrigieren textarea, .feld textarea, .feld input, .feld select { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: #fff; color: var(--ink); }
+.korrigieren label, .feld { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; font-weight: 700; color: var(--navy); font-size: .9rem; }
+.pseudo-text { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--canvas); border: 1px solid var(--line); border-radius: 10px; padding: 12px; max-height: 55vh; overflow: auto; font: .9rem/1.5 ui-monospace, Menlo, Consolas, monospace; }
+.pseudo-platzhalter { background: #dff1ef; color: #075d59; border-radius: 4px; padding: 0 2px; cursor: pointer; }
+.pseudo-bild { margin: 10px 0; }
+.pseudo-bild img, .ergebnis-bild { max-width: 100%; max-height: 60vh; border: 1px solid var(--line); border-radius: 10px; display: block; }
+.ergebnis { border-top: 1px solid var(--line); padding: 12px 0; display: grid; gap: 8px; }
+.ergebnis:first-of-type { border-top: 0; }
+.ergebnis-text { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 10px; font: .92rem/1.5 Arial, sans-serif; }
+.meldung .drehen { display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: drehen .8s linear infinite; vertical-align: -1px; }
+@keyframes drehen { to { transform: rotate(360deg); } }
+.meldung.gut { background: var(--green-soft); color: var(--green); }
+.site-footer a { color: #9fd6e6; }
+.reiter-leiste button.aktiv { background: var(--navy-2); border-color: var(--navy-2); color: #fff; }
+/* Fenster */
+.fenster-grund { position: fixed; inset: 0; z-index: 100; background: rgba(9, 30, 50, .55); display: grid; place-items: center; padding: 12px; }
+.fenster { width: min(960px, 100%); max-height: calc(100dvh - 24px); display: flex; flex-direction: column; background: #fff; border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.fenster-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); color: var(--navy); }
+.fenster-kopf strong { overflow-wrap: anywhere; }
+.fenster-inhalt { padding: 14px 16px; overflow: auto; display: grid; gap: 10px; }
+/* Abdeck-Editor */
+.abdecken { width: min(1100px, 100%); max-height: calc(100dvh - 24px); display: flex; flex-direction: column; gap: 8px; background: #fff; border-radius: 16px; padding: 12px; overflow: auto; }
+.abdecken.gross { width: 100%; height: calc(100dvh - 24px); }
+.abdecken-kopf { display: flex; align-items: center; gap: 10px; color: var(--navy); }
+.abdecken-kopf strong { flex: 1 1 auto; overflow-wrap: anywhere; }
+.abdecken-leiste { margin-top: 0; gap: 6px; }
+.abdecken-leiste .trenner { width: 1px; align-self: stretch; background: var(--line); margin: 0 4px; }
+.abdecken-hinweis { margin: 0; min-height: 2.9em; }
+.abdecken-buehne { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; background: repeating-conic-gradient(#eef3f6 0 25%, #fff 0 50%) 0 0 / 20px 20px; border-radius: 10px; overflow: auto; }
+.abdecken-svg { display: block; width: min(100%, calc(68vh * var(--verh, 1.5))); height: auto; touch-action: none; user-select: none; }
+.abdecken.gross .abdecken-svg { width: min(100%, calc((100dvh - 230px) * var(--verh, 1.5))); }
+.abdecken-svg.wz-rechteck, .abdecken-svg.wz-ellipse, .abdecken-svg.wz-vieleck { cursor: crosshair; }
+.abdecken-fuss { align-items: center; }
+@media (max-width: 640px) {
+  .pseudo-zeile { flex-wrap: wrap; }
+  .pseudo-knoepfe { width: 100%; justify-content: flex-start; }
+  .abdecken, .fenster { border-radius: 10px; }
+  .abdecken-leiste .button.klein { min-width: 38px; }
+}

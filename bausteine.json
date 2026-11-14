@@ -1,0 +1,39 @@
+{
+ "erzeugt": "2026-11-14",
+ "quellen": {
+  "familienakte": {
+   "repo": "lausiklauskn-png/Meine-Familienakte",
+   "commit": "471f018",
+   "dateien": {
+    "lib/maske/maske.ts": "42287948ea24e99f05e1ab1757c82e1f094ae217d0e2307fbcbfe2154ecc78bb",
+    "lib/maske/ki-auftrag.ts": "daae3d910f8192464d0a39cca1650c4a1c776062b4fba92649ff87d3e8866881",
+    "lib/maske/namensmuster.ts": "fb513b6bb087720d13d64687c66932f44771ace8c6c3af54af94394cb8349530",
+    "src/public/vendor/maske/25_pseudonym.js": "8c3092babee80b8fce2c6607cc4c8ced4bbef4addf31a5f0f3de6ba5c92c2ad7"
+   }
+  },
+  "datei-organizer": {
+   "repo": "lausiklauskn-png/Datei-Organizer",
+   "commit": "63ccd30",
+   "dateien": {
+    "lib/bausteine/typen.ts": "b0314ab7ca6b2025bd2b724a5b6ad1bfc47fcfef8e65f93b1d23d882cf8957d0",
+    "lib/bausteine/dateiart.ts": "abfbef5f64341f87ac7630da45aea283866a0cc592e79dec05d8282ebd1fc7ca",
+    "lib/bausteine/eml.ts": "45ad4ad99f37644bf6532a7c0a8ed6e52f5d6055753cf25bf73ed04bd3f38d03",
+    "lib/bausteine/zip.ts": "9e4ca8b8cbf14c59d477bd7f83079a1282f661d8678e0f4fa45de5868d9b3133",
+    "lib/bausteine/gehalt.ts": "81b68eae61b07d2fd4128749feb2054888cc4372a84bd1b3f88962e2e549b833",
+    "lib/bausteine/pdf-text.ts": "e998f6a7e3191901e69f161c778618dd582a4a45d3dde3464a527184b5efac82",
+    "src/public/vendor/pruefkern/pruefer-anhang.js": "c31ddb5cebc293b542e781a5d1f3bca6d558da227db997822c73b2b8a4c1ea17",
+    "src/public/vendor/pruefkern/pruefer-formate.js": "c7206f163521fd3cf1b09845a7e547e912564838ff1bf899c2575366764d15cd",
+    "src/public/vendor/pruefkern/pruefer-mail.js": "cdf3ca7881bfa68763a2c0be7436d35a65bea4dbd03f606e02eaec5c613632d7",
+    "src/public/vendor/tesseract/LICENSE-Apache-2.0.txt": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+    "src/public/vendor/tesseract/lang/deu.traineddata": "19d219bbb6672c869d20a9636c6816a81eb9a71796cb93ebe0cb1530e2cdb22d",
+    "src/public/vendor/tesseract/tesseract-core-lstm.wasm.js": "eef5f8b2f8e20e150680b20adaec4a60babafee3adbe8a94583c81fee46e8680",
+    "src/public/vendor/tesseract/tesseract-core-relaxedsimd-lstm.wasm.js": "861a536cf9ef8e63cb644d57bab39c388f37f7d6b6f60024b741c5f6b39a59b3",
+    "src/public/vendor/tesseract/tesseract-core-simd-lstm.wasm.js": "c58b46a4c796c0b8afccf77591d5b875b6896b45d402bbce8caa6f5362447b38",
+    "src/public/vendor/tesseract/tesseract.min.js": "000c27d9cd0def655f77b36c72a389c0ab13793aa31cb4d7aab56d09c0afbc7e",
+    "src/public/vendor/tesseract/tesseract.min.js.LICENSE.txt": "cdf963ced7d25a0f98901a547647b4d6e2dbe0197fd78c87a059a87b0e542fe2",
+    "src/public/vendor/tesseract/worker.min.js": "576b7df7e3393e137e51849357c9adb53fe7ac1bb69bfa06cf3d61520f182c6d",
+    "src/public/vendor/tesseract/worker.min.js.LICENSE.txt": "45f54171aeaa1d10c0c1a66f374b7bba1f02472b1487fbe892eec04f840002ac"
+   }
+  }
+ }
+}

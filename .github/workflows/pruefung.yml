@@ -1,0 +1,25 @@
+name: pruefung
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  pruefung:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Bausteine, Logo, Kern, Typen, Bau
+        run: npm run build
+      - name: app/ ist der gebaute Stand
+        run: git diff --exit-code -- app/ || (echo "app/ ist nicht neu gebaut – npm run build und app/ mitgeben" && exit 1)
+      - name: Browser
+        run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
+      - name: Oberfläche
+        run: node tests/ui-probe.mjs
