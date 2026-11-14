@@ -1,0 +1,38 @@
+/* PseudoDoc – eigene Gestaltung über styles.css (Familienakte-Farben) und pseudo.css. */
+.pd-logo { display: block; flex: 0 0 auto; border-radius: 12px; box-shadow: 0 6px 16px rgba(8, 49, 84, .28); }
+.pd-logo .pd-lauf, .pd-logo .pd-strahl { animation: pd-lauf 1.6s cubic-bezier(.6, .05, .25, 1) .25s both; }
+@keyframes pd-lauf { from { transform: translateX(-34px); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .pd-logo .pd-lauf, .pd-logo .pd-strahl { animation: none; } }
+.pd-name { font-size: 1.22rem !important; letter-spacing: .01em; }
+.pd-name em { font-style: normal; font-size: .7rem; font-weight: 800; color: var(--teal); background: var(--teal-soft); border-radius: 999px; padding: 2px 8px; vertical-align: 3px; margin-left: 4px; }
+.pd-reiter button { font-size: .9rem; }
+.pd-nr { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.16); font-size: .78rem; font-weight: 900; }
+.pd-reiter button.active .pd-nr { background: #54b8d2; color: #062238; }
+.pd-main { max-width: 980px; }
+.pd-rein.leer .pseudo-ablage { min-height: 240px; gap: 10px; background: linear-gradient(180deg, #f7fbfd, #edf5f9); }
+.pd-rein.leer .pseudo-ablage strong { font-size: 1.25rem; }
+.pd-rein-knoepfe { justify-content: center; margin-top: 8px; }
+.pd-rein:not(.leer) .pseudo-ablage { min-height: 0; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 12px; padding: 10px 12px; }
+.pd-rein:not(.leer) .pd-rein-knoepfe { margin: 0 0 0 auto; }
+.pd-daumen { flex: 0 0 auto; width: 56px; height: 56px; border-radius: 10px; border: 1px solid var(--line); background: var(--canvas); display: grid; place-items: center; overflow: hidden; padding: 0; color: var(--navy-2); }
+.pd-daumen img { width: 100%; height: 100%; object-fit: cover; }
+.pd-warnung { display: flex; gap: 6px; align-items: flex-start; font-size: .84rem; color: var(--red); background: var(--red-soft); border-radius: 8px; padding: 6px 8px; }
+.pd-aufgabe { gap: 6px; margin: 0 0 10px; }
+.chip.leicht { background: #fff; }
+.pd-trenner { width: 1px; align-self: stretch; background: var(--line); margin: 2px 4px; }
+.chip.leicht.an { background: var(--teal); border-color: var(--teal); }
+.pd-frei { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; margin-bottom: 10px; }
+.pd-bilder { margin: 0 0 12px; font-size: .9rem; color: var(--navy); font-weight: 700; }
+.pd-ziele { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+.pd-ziel { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 64px; border: 0; border-radius: 14px; padding: 12px 14px; color: #fff; text-align: left; box-shadow: 0 6px 18px rgba(8, 49, 84, .18); transition: transform .12s, box-shadow .12s; }
+.pd-ziel:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(8, 49, 84, .25); }
+.pd-ziel:active:not(:disabled) { transform: translateY(0); }
+.pd-ziel-name { font-weight: 900; font-size: 1.05rem; }
+.pd-ziel-unter { font-size: .74rem; opacity: .85; }
+.pd-ziel-chatgpt { background: linear-gradient(135deg, #0f6b5b, #10a37f); }
+.pd-ziel-claude { background: linear-gradient(135deg, #a8532f, #d97757); }
+.pd-ziel-claudecode { background: linear-gradient(135deg, #3a2a20, #8a5a3c); }
+.pd-ziel-gemini { background: linear-gradient(135deg, #2b55c9, #8e5cf0); }
+.pd-antwort { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 4px 0 10px; font: .95rem/1.5 Arial, sans-serif; }
+kbd { font: 700 .78rem ui-monospace, monospace; background: #fff; border: 1px solid #b9c9d4; border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; }
+@media (max-width: 760px) { .pd-ziele { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pd-rein:not(.leer) .pd-rein-knoepfe { margin: 0; } .pd-reiter { justify-content: stretch; } .pd-reiter button { flex: 1 1 0; justify-content: center; } }

@@ -1,0 +1,28 @@
+{
+  "name": "pseudodoc",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "PseudoDoc – Dateien rein, pseudonymisiert zur KI, Antwort zurück. Alles auf dem Gerät.",
+  "engines": { "node": ">=22.18.0" },
+  "scripts": {
+    "dev": "vite",
+    "probe:kern": "node scripts/kern-probe.mjs",
+    "build": "node scripts/bausteine.mjs --pruefen && node scripts/logo.mjs --pruefen && node scripts/kern-probe.mjs && tsc --noEmit && vite build",
+    "probe:ui": "node tests/ui-probe.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "1.31.0",
+    "pdfjs-dist": "4.10.38",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "typescript": "5.9.3",
+    "vite": "6.4.1"
+  }
+}
