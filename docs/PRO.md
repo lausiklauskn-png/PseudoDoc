@@ -54,7 +54,7 @@ echo "== öffentlicher Schlüssel:"; openssl pkey -in signatur.pem -pubout | sed
 ✅ Erledigt am 14.11.2026 (Schlüssel `MCowBQYDK2VwAyEAKLX6…8QQ=` eingetragen). Danach die **eine Zeile** nach „öffentlicher Schlüssel:“ (beginnt mit `MCowBQYDK2VwAyEA`, öffentlich) an Claude geben; sie kommt in
 `UpdateFeed.SCHLUESSEL` (Android) **und** `DesktopUpdates.SCHLUESSEL` (Windows). Bis dahin melden Updates „nicht eingerichtet“.
 
-**(c) Veröffentlichen** (erst nach a und b, nur auf Klaus' Wort): Actions → „PseudoDoc Pro Android veröffentlichen“ (Tag `v0.1.0`, voller
+**(c) Veröffentlichen** – ✅ 0.1.0 am 14.11.2026 (Nachweis `docs/VEROEFFENTLICHUNG-0.1.0.json`; nicht erneut ausgeben, nächste 0.1.1). Ablauf (nur auf Klaus' Wort): Actions → „PseudoDoc Pro Android veröffentlichen“ (Tag `v0.1.0`, voller
 main-Commit, `bestaetigung` = `ja`) und „PseudoDoc Pro Windows veröffentlichen“. Die Läufe bauen, signieren, prüfen, veröffentlichen,
 unterschreiben den Feed und laden nach `family-projekt.de/updates/pseudodoc/` hoch.
 

@@ -8,7 +8,7 @@ Diese Datei liest jede Sitzung zuerst.
 Flächen) → mit einem Klick zur KI (ChatGPT, Claude, Claude Code, Gemini: Text + Bild in die Zwischenablage, Seite öffnet sich) →
 Antwort zurück → echte Angaben wieder drin. **Einfach in der Bedienung, höchster Stand in der Technik** (Klaus: „einfach, aber genial“ ·
 „Einfach bedeutet nicht niedriger Standard … höher als die Familienakte“). Teil der Pro-App-Familie: Basic = Web-App (Pages),
-**Pro = Android/Windows** (Hülle gebaut 14.11., noch nicht veröffentlicht; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
+**Pro = Android/Windows** (**0.1.0 veröffentlicht 14.11., nicht erneut ausgeben; nächste 0.1.1**, Nachweis `docs/VEROEFFENTLICHUNG-0.1.0.json`; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
 
 Adresse: https://lausiklauskn-png.github.io/PseudoDoc/ (leitet auf `app/`). Plan, Stand, Fragen: `docs/PLAN.md`.
 
