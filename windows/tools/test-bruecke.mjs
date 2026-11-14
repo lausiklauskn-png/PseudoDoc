@@ -15,8 +15,9 @@ const vertr=JSON.parse(await readFile(join(root,'windows/bridge/contracts.json')
 const main=await readFile(join(root,'windows/src-tauri/src/main.rs'),'utf8');
 console.log('Verträge');
 soll('main.rs liest contracts.json und prüft jede Methode',main.includes('include_str!("../../bridge/contracts.json")')&&main.includes('Err("NOT_ALLOWED".into())'));
-const quellen=await readFile(join(root,'src/quellen.ts'),'utf8'),nativ=await readFile(join(root,'src/nativ.ts'),'utf8');
-for(const m of ['ordnerWaehlen','ordnerListe','dateiLesen','dateiBeginn','dateiAnhaengen','dateiFertig','gemerkt','wiederOeffnen','vergessen'])soll(`FamilyFolders.${m} im Vertrag (src/quellen.ts ruft es)`,vertr.FamilyFolders.includes(m)&&quellen.includes(m));
+// PseudoDoc ruft DoEingang (src/eingang.ts), DoDateien (src/ordner.ts) und DoUpdates (src/nativ.ts); FamilyFolders ist für den Arbeitsordner vorbereitet.
+const quellen=(await readFile(join(root,'src/eingang.ts'),'utf8'))+(await readFile(join(root,'src/ordner.ts'),'utf8')),nativ=await readFile(join(root,'src/nativ.ts'),'utf8');
+for(const m of ['ordnerWaehlen','ordnerListe','dateiLesen','dateiBeginn','dateiAnhaengen','dateiFertig','gemerkt','wiederOeffnen','vergessen'])soll(`FamilyFolders.${m} im Vertrag (wie Android)`,vertr.FamilyFolders.includes(m));
 for(const [p,ms] of [['DoEingang',['abholen','lesen']],['DoDateien',['speichern']],['DoUpdates',['pruefen','installieren']]])for(const m of ms)soll(`${p}.${m} im Vertrag`,vertr[p]?.includes(m)&&(quellen+nativ).includes(m));
 soll('Brücke kennt genau die Plugins des Vertrags',JSON.stringify(Object.keys(vertr).sort())===JSON.stringify([...bruecke.matchAll(/'(FamilyFolders|DoEingang|DoDateien|DoUpdates)'/g)].map(m=>m[1]).sort()));
 const host=await readFile(join(root,'windows/src-tauri/src/host.rs'),'utf8');
