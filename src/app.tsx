@@ -458,7 +458,7 @@ function ZurueckSeite({ start }: { start: string }) {
     <section className="card" data-karte="auftraege">
       <div className="card-heading"><h2>Aufträge auf diesem Gerät</h2><Info titel="Aufträge" punkte={["Jeder Auftrag merkt sich die Zuordnung – verschlüsselt, nur auf diesem Gerät.", `Nach ${speicher.HALTBAR_TAGE} Tagen ohne Änderung wird er gelöscht; „Erledigt“ löscht sofort.`, "„Sichern“ legt die Zuordnung mit Passwort in eine Datei – für ein anderes Gerät. Nie an eine KI geben."]}/></div>
       {liste?.length ? <ul className="pseudo-liste">{liste.map((a) => <li key={a.id} className="pseudo-zeile" data-auftrag={a.id}>
-        <span className="pseudo-name"><strong>{a.name}</strong><span className="leise">{a.stuecke.length} Dateien · noch {tage(a)} Tage</span></span>
+        <span className="pseudo-name"><strong>{a.name}</strong><span className="leise" data-auftrag-stand>{`${a.stuecke.length} Dateien · noch ${tage(a)} Tage`}</span></span>
         <span className="pseudo-knoepfe">
           <button type="button" className="button klein" onClick={() => void sichern(a)}><KeyRound size={16}/> Sichern</button>
           <button type="button" className="button klein" onClick={async () => { if (confirm(`„${a.name}“ erledigt? Die Zuordnung wird gelöscht – Zurückholen geht danach nicht mehr.`)) { await speicher.loeschen(a.id); neu(); } }} data-erledigt><Trash2 size={16}/> Erledigt</button>
