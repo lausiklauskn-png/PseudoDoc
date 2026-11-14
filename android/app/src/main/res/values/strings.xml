@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PseudoDoc Pro</string>
+    <string name="title_activity_main">PseudoDoc Pro</string>
+    <string name="package_name">de.familyprojekt.pseudodoc</string>
+    <string name="custom_url_scheme">de.familyprojekt.pseudodoc</string>
+</resources>

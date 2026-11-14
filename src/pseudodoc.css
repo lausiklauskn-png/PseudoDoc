@@ -36,3 +36,7 @@
 .pd-antwort { width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 4px 0 10px; font: .95rem/1.5 Arial, sans-serif; }
 kbd { font: 700 .78rem ui-monospace, monospace; background: #fff; border: 1px solid #b9c9d4; border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; }
 @media (max-width: 760px) { .pd-ziele { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pd-rein:not(.leer) .pd-rein-knoepfe { margin: 0; } .pd-reiter { justify-content: stretch; } .pd-reiter button { flex: 1 1 0; justify-content: center; } }
+.pd-installieren { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; padding: 8px 13px; color: #fff; background: linear-gradient(135deg, var(--navy-2), var(--teal)); font-size: .8rem; font-weight: 900; box-shadow: 0 4px 12px rgba(8, 49, 84, .25); }
+.pd-installieren:hover { filter: brightness(1.08); }
+@media (max-width: 560px) { .pd-installieren span { display: none; } .pd-installieren { padding: 8px; } .site-brand small { display: none; } }
+@media (display-mode: standalone) { .pd-installieren { display: none; } }

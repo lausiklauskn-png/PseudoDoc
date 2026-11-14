@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hintergrund des adaptiven Symbols von PseudoDoc Pro: Blau mit leichtem Verlauf (wie src/maske.ts). Erzeugt nicht von Hand ändern ohne die Maske. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="315" android:startColor="#103D66" android:endColor="#0B3154" android:type="linear"/>
+</shape>

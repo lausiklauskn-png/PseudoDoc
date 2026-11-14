@@ -88,7 +88,8 @@ const docText = await officeText(doc, "x.docx");
 ok("Word-Datei: Text kommt heraus", docText.includes("Sehr geehrter Herr Brink,") && docText.includes("wichtig & <klar>"), docText);
 
 // Kein Netzweg in Kern und Oberfläche des Pseudonymisierers
-const ohneNetz = (datei) => { const q = readFileSync(datei, "utf8").replace(/\/\/.*$/gm, ""); return !/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|EventSource|import\(\s*["']https?:/.test(q); };
+// Einzige erlaubte Abfrage: die eigene version.json (Update-Fähnchen der Web-App, src/kopf.tsx).
+const ohneNetz = (datei) => { const q = readFileSync(datei, "utf8").replace(/\/\/.*$/gm, "").replace(/fetch\(`\.\/version\.json\?t=\$\{Date\.now\(\)\}`/g, ""); return !/\bfetch\s*\(|XMLHttpRequest|WebSocket|sendBeacon|EventSource|import\(\s*["']https?:/.test(q); };
 const dateienOhneNetz = [...readdirSync("lib/pseudo").map((d) => `lib/pseudo/${d}`), ...readdirSync("src").filter((d) => /\.tsx?$/.test(d)).map((d) => `src/${d}`)];
 for (const d of dateienOhneNetz) ok(`Kein Netzaufruf: ${d}`, ohneNetz(d));
 console.log(`PseudoDoc-Kern: ${n} grün`);

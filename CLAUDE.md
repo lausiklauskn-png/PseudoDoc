@@ -8,7 +8,7 @@ Diese Datei liest jede Sitzung zuerst.
 Flächen) → mit einem Klick zur KI (ChatGPT, Claude, Claude Code, Gemini: Text + Bild in die Zwischenablage, Seite öffnet sich) →
 Antwort zurück → echte Angaben wieder drin. **Einfach in der Bedienung, höchster Stand in der Technik** (Klaus: „einfach, aber genial“ ·
 „Einfach bedeutet nicht niedriger Standard … höher als die Familienakte“). Teil der Pro-App-Familie: Basic = Web-App (Pages),
-Pro = Android/Windows (noch nicht gebaut, Muster Datei-Organizer). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
+**Pro = Android/Windows** (Hülle gebaut 14.11., noch nicht veröffentlicht; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
 
 Adresse: https://lausiklauskn-png.github.io/PseudoDoc/ (leitet auf `app/`). Plan, Stand, Fragen: `docs/PLAN.md`.
 
@@ -34,9 +34,19 @@ Adresse: https://lausiklauskn-png.github.io/PseudoDoc/ (leitet auf `app/`). Plan
 - **Gespeichert** wird Klartext nur verschlüsselt (Zuordnung, Dateinamen, Korrekturen); die Probe liest die IndexedDB-Bytes.
 - Pseudonymisiert ist nicht anonym – das steht hinter dem „?“ und im Datenschutz.
 
+## Pro (Android, Windows)
+
+`android/`, `windows/`, `tools/native`, `tools/signing` aus dem Datei-Organizer übernommen und umbenannt (`de.familyprojekt.pseudodoc`,
+„PseudoDoc Pro“, Updates `family-projekt.de/updates/pseudodoc/`, Geheimnis `PD_SIGNING_UNLOCK`). Fassung steht in `package.json` und muss
+gleich sein in `android/app/build.gradle` (versionName, versionCode = Haupt×1000 + Neben×10 + Flick), `windows/package.json`,
+`windows/src-tauri/{tauri.conf.json,Cargo.toml}` – `test-native.mjs` prüft das. Kopf: Fassung = Update-Knopf, Fähnchen, Installieren
+(nur Web) in `src/kopf.tsx`. Was Klaus einmalig tun muss (Signieridentität, Update-Schlüssel): `docs/PRO.md`. Nie `call.getLong` für
+kleine Zahlen in Java-Plugins (Lehre der Familienakte).
+
 ## Proben
 
-`npm run build` (Pins, Logo, Kern 54, Typen, Bau) · `node tests/ui-probe.mjs` (Browser, 46; CI `pruefung.yml`).
+`npm run build` (Pins, Logo, Kern 59, Typen, Bau) · `node tests/ui-probe.mjs` (Browser, 52) · `node tools/native/test-native.mjs` (67)
+· `node windows/engine/test.mjs` (64; Linux mit `LANG=C.UTF-8`). CI: `pruefung.yml`, `android.yml`, `windows.yml`.
 
 ## Feste Regeln (aus der Familie übernommen)
 

@@ -29,7 +29,7 @@ Tablet; große Ordner (kein Anhalten/Weitermachen); Gesichtserkennung (im Test-C
 ## Nächste Schritte
 
 1. Klaus' Blick auf die Web-App.
-2. **Pro (Android, Windows)**: Hülle nach dem Muster Datei-Organizer (`android/` Capacitor, `windows/` Tauri + Java-Engine), Paket
+2. ✅ **Pro (Android, Windows)** – Hülle gebaut (14.11., `docs/PRO.md`), wartet auf Signieridentität und Update-Schlüssel. Ursprünglich: Hülle nach dem Muster Datei-Organizer (`android/` Capacitor, `windows/` Tauri + Java-Engine), Paket
    `de.familyprojekt.pseudodoc`, eigene Signier-Identität, Updates von `family-projekt.de/updates/pseudodoc/` mit Fähnchen, Teilen/„Öffnen
    mit“ an PseudoDoc, Arbeitsordner auf SD/PC. Veröffentlichen nur mit Klaus' Wort.
 3. **Verbindung (aus, bis Klaus freischaltet):** Familienakte-Pseudo-Fenster „An PseudoDoc“, Profile aus dem Pro-Tresor (Fach `profile`),
