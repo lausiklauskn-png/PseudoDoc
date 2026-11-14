@@ -24,7 +24,7 @@ final class UpdateFeed {
      * (docs/PRO.md, Schritt b). Der geheime Teil liegt nur in Termux und als GitHub-Geheimnis UPDATE_SIGNING_KEY.
      * Dieselbe Zeile steht in DesktopUpdates.SCHLUESSEL (Windows) – test-native.mjs und die Veröffentlichungs-Läufe prüfen das.
      */
-    static final String SCHLUESSEL = ""; // PseudoDoc-eigener Schlüssel fehlt noch – Klaus gibt ihn (docs/PRO.md, Schritt b)
+    static final String SCHLUESSEL = "MCowBQYDK2VwAyEAKLX682kYM3XCzwQIcQ0K9g3GdpefCrfm0d7XFudk8QQ="; // Klaus 14.11.2026 (docs/PRO.md, Schritt b)
     static final long MAX_APK = 512L * 1024 * 1024;
     private static final byte[] SPKI_KOPF = { 0x30, 0x2a, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x03, 0x21, 0x00 };
     private UpdateFeed() { }

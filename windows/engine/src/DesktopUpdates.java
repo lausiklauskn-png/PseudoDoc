@@ -24,7 +24,7 @@ final class DesktopUpdates {
     static final String FEED = "aktuell-windows.json";
     /** Öffentlicher Signatur-Schlüssel (Ed25519, SubjectPublicKeyInfo, Base64 – dieselbe Zeile wie UpdateFeed.SCHLUESSEL unter
      *  Android). Der geheime liegt nur als GitHub-Geheimnis UPDATE_SIGNING_KEY (Klaus 14.11.2026). */
-    static final String SCHLUESSEL = ""; // PseudoDoc-eigener Schlüssel fehlt noch – Klaus gibt ihn (docs/PRO.md, Schritt b)
+    static final String SCHLUESSEL = "MCowBQYDK2VwAyEAKLX682kYM3XCzwQIcQ0K9g3GdpefCrfm0d7XFudk8QQ="; // Klaus 14.11.2026 (docs/PRO.md, Schritt b)
     static final long MAX_SETUP = 1024L * 1024 * 1024;
     interface Netz { byte[] holen(String url, long grenze) throws Exception; InputStream strom(String url) throws Exception; }
     private final Path ordner;

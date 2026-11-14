@@ -31,7 +31,7 @@ Muster und Code: Datei-Organizer Pro (dort gebaut und am 14.11. veröffentlicht)
 
 Nichts davon kann Claude tun; nichts wird ohne Klaus' Wort ausgelöst oder veröffentlicht.
 
-**(a) Eigene Signieridentität** (dauerhafter Schlüssel nur für PseudoDoc Pro):
+**(a) Eigene Signieridentität** (dauerhafter Schlüssel nur für PseudoDoc Pro) – ✅ erzeugt am 14.11.2026, Fingerabdruck `53bea630…52b9` (PR 3):
 1. Freigabe erzeugen (Termux): `openssl rand -hex 32 > ~/pd-signing-freigabe.txt` – verschlüsselt sichern (`age -p`), offene Datei löschen. **Nie in den Chat.**
 2. GitHub → PseudoDoc → Settings → Environments → **New environment** `android-production` → **Add environment secret** `PD_SIGNING_UNLOCK` = Inhalt der Datei.
 3. Actions → **„Dauerhafte PseudoDoc-Pro-Signieridentität“** → Run workflow auf `main`, Operation **initialize**. Der Lauf legt einen PR
@@ -51,7 +51,7 @@ gh secret list -R $R | grep UPDATE_
 echo "== öffentlicher Schlüssel:"; openssl pkey -in signatur.pem -pubout | sed -n 2p
 ```
 
-Danach die **eine Zeile** nach „öffentlicher Schlüssel:“ (beginnt mit `MCowBQYDK2VwAyEA`, öffentlich) an Claude geben; sie kommt in
+✅ Erledigt am 14.11.2026 (Schlüssel `MCowBQYDK2VwAyEAKLX6…8QQ=` eingetragen). Danach die **eine Zeile** nach „öffentlicher Schlüssel:“ (beginnt mit `MCowBQYDK2VwAyEA`, öffentlich) an Claude geben; sie kommt in
 `UpdateFeed.SCHLUESSEL` (Android) **und** `DesktopUpdates.SCHLUESSEL` (Windows). Bis dahin melden Updates „nicht eingerichtet“.
 
 **(c) Veröffentlichen** (erst nach a und b, nur auf Klaus' Wort): Actions → „PseudoDoc Pro Android veröffentlichen“ (Tag `v0.1.0`, voller
