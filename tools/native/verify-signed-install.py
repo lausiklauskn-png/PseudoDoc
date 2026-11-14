@@ -55,7 +55,8 @@ def launch():
     if not adb('shell', 'pidof', package).strip(): raise RuntimeError('App-Prozess fehlt')
 
 def stand():
-    tap(wait_node(lambda a: any(t.endswith('Zurück') for t in texte(a)), 60))
+    # Reiter „2 Zurück“ (Großbuchstaben per CSS: Android meldet „2 ZURÜCK“); nicht der Link „Antwort ist da → Zurück“.
+    tap(wait_node(lambda a: any(re.fullmatch(r'2\s*ZURÜCK', t.upper()) for t in texte(a)), 60))
     return wait_node(lambda a: any(STAND.search(t) for t in texte(a)), 180)
 
 def diagnose():
