@@ -1,0 +1,31 @@
+{
+  "app": "PseudoDoc Pro",
+  "fassung": "0.1.0",
+  "datum": "2026-11-14",
+  "freigabe": "Klaus 14.11.2026: „Wenn alles soweit okay ist, dann kannst du veröffentlichen.“",
+  "android": {
+    "datei": "PseudoDoc-Pro-0.1.0.apk",
+    "versionCode": 10,
+    "bytes": 12211780,
+    "sha256": "337ac765440560a0732496c1cf18b0429ef8288f9f18365626dd53d64efa2f4b",
+    "zertifikat_sha256": "53bea630e03851d72b0757730297a757af317e88cb9343e181a370cf50ad52b9",
+    "commit": "e4bada2",
+    "release": "https://github.com/lausiklauskn-png/PseudoDoc/releases/tag/v0.1.0",
+    "server": "https://family-projekt.de/updates/pseudodoc/PseudoDoc-Pro-0.1.0.apk",
+    "geprueft": "Emulator: Erstinstallation, Beispiel pseudonymisieren, Auftrag gemerkt, Überinstallieren, Auftrag noch da (verify-signed-install.py); Download vom Server per SHA-256 im Lauf"
+  },
+  "windows": {
+    "datei": "PseudoDoc-Pro-Windows-0.1.0-x64-setup.exe",
+    "bytes": 24825179,
+    "sha256": "3b2c6084bbb0b39d21343beda95e48f645d7239278ec8864cd4da7d24828cfd3",
+    "commit": "e644851",
+    "lauf": 43640647485,
+    "server": "https://family-projekt.de/updates/pseudodoc/PseudoDoc-Pro-Windows-0.1.0-x64-setup.exe",
+    "geprueft": "SHA256SUMS im Lauf, Download vom Server per SHA-256 verglichen",
+    "hinweis": "gebaut vor #5 (nur Text der Auftragszeile und Emulator-Probe), sonst gleich"
+  },
+  "basic": "https://lausiklauskn-png.github.io/PseudoDoc/",
+  "geschenkbox": "Familienakte #187, Artefakt XeUMGuSZ49FzsJYjwQznM7 Version 28",
+  "nicht_am_geraet": "Kein echtes Android-Gerät, kein Windows-PC geprüft",
+  "naechste_fassung": "0.1.1"
+}
