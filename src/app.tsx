@@ -22,10 +22,18 @@ import { eingangAbholen, eingangLauschen } from "./eingang.ts";
 
 import { APP_VARIANTE as VARIANTE, APP_NAME } from "./nativ.ts";
 import { FASSUNG, KopfKnoepfe } from "./kopf.tsx";
+import { PruefSeite, BerichtAnzeige, ausBefunden } from "./pruefen.tsx";
+import { rueckwegPruefen, type Punkt } from "../lib/pseudo/rueckweg.ts";
+import { sauber, UNSICHTBAR } from "../lib/pseudo/auftrag.ts";
+import { pruefeMail } from "./pruefkern.ts";
+import { LogIn, LogOut, Sparkles } from "lucide-react";
 export { VARIANTE };
 const modul25 = () => (window as unknown as { SbkimPseudonym?: Pseudonymisierer }).SbkimPseudonym;
 
-type Seite = "hin" | "zurueck";
+type Seite = "start" | "rein" | "hin" | "zurueck" | "raus";
+const SEITEN: Seite[] = ["start", "rein", "hin", "zurueck", "raus"];
+const ausHash = (): Seite => { const h = location.hash.slice(1) as Seite; return SEITEN.includes(h) ? h : "start"; };
+export const UNTERTITEL = "Dateien prüfen, pseudonymisieren, sicher weitergeben";
 type Eintrag = { kennung: string; g: Gelesen; vorschlaege: Flaeche[] };
 const TOKEN = /⟦[A-Z][A-Z0-9_]*-\d+⟧/g;
 const neueId = () => `${new Date().toISOString().slice(0, 10)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -37,22 +45,25 @@ function markiert(text: string, map: Record<string, string>, klick?: (tok: strin
 }
 
 export function App() {
-  const [seite, setSeite] = useState<Seite>(() => (location.hash === "#zurueck" ? "zurueck" : "hin"));
+  const [seite, setSeite] = useState<Seite>(ausHash);
   const [zurueckId, setZurueckId] = useState("");
-  useEffect(() => { const h = () => setSeite(location.hash === "#zurueck" ? "zurueck" : "hin"); addEventListener("hashchange", h); return () => removeEventListener("hashchange", h); }, []);
-  const gehe = (s: Seite) => { location.hash = s === "zurueck" ? "zurueck" : ""; setSeite(s); scrollTo(0, 0); };
+  const [beispiel, setBeispiel] = useState(0);
+  useEffect(() => { const h = () => setSeite(ausHash()); addEventListener("hashchange", h); return () => removeEventListener("hashchange", h); }, []);
+  const gehe = (s: Seite) => { if (location.hash.slice(1) !== (s === "start" ? "" : s)) { if (s === "start") history.pushState(null, "", location.pathname + location.search); else location.hash = s; } setSeite(s); scrollTo(0, 0); };
+  const reiter = (s: Seite, inhalt: ReactNode) => <button type="button" className={seite === s ? "active" : ""} aria-current={seite === s ? "page" : undefined} onClick={() => gehe(s)} data-seite={s}>{inhalt}</button>;
   return <>
     <header className="site-header">
       <div className="masthead">
         <button type="button" className="site-brand" onClick={() => gehe("hin")} aria-label="PseudoDoc – zum Anfang">
           <Logo groesse={46}/>
-          <span><strong className="pd-name" data-app-name={APP_NAME}>PseudoDoc <em>{VARIANTE}</em></strong><small>Datei rein · pseudonymisiert zur KI · zurück</small></span>
+          <span><strong className="pd-name" data-app-name={APP_NAME}>PseudoDoc <em>{VARIANTE}</em></strong><small data-untertitel>{UNTERTITEL}</small></span>
         </button>
         <div className="header-actions">
           <KopfKnoepfe/>
           <Info titel="So geht es" mehr={<>
-            <Ablaufbild label="Ablauf" schritte={[{ titel: "Datei rein", unter: "Brief, PDF, Foto, Mail" }, { titel: "Pseudonymisiert", unter: "Namen → ⟦NAME-1⟧, Bilder schwarz" }, { titel: "Zur KI", unter: "ein Klick, dann einfügen", art: "hervor" }, { titel: "Zurück", unter: "echte Angaben wieder drin" }]}/>
+            <Ablaufbild label="Drei Wege" schritte={[{ titel: "Rein", unter: "kann ich das öffnen?" }, { titel: "Zur KI", unter: "pseudonymisiert hin und zurück", art: "hervor" }, { titel: "Raus", unter: "kann ich das weitergeben?" }]}/>
             <ul>
+              <li>Rein und Raus prüfen eine Datei auf Verstecktes; Raus legt eine bereinigte Kopie an. Kein Virenscanner.</li>
               <li>Alles geschieht auf diesem Gerät. PseudoDoc sendet nichts – du fügst selbst bei der KI ein.</li>
               <li>Hinaus gehen nur Text und neu gezeichnete Bilder: keine Dateinamen, keine Kamera-, Orts- oder Zeitangaben, keine unsichtbaren Zeichen.</li>
               <li>Die Zuordnung (welcher Platzhalter wofür steht) bleibt verschlüsselt hier, höchstens 90 Tage.</li>
@@ -61,20 +72,40 @@ export function App() {
         </div>
       </div>
       <nav className="main-navigation pd-reiter" aria-label="Richtung">
-        <button type="button" className={seite === "hin" ? "active" : ""} aria-current={seite === "hin" ? "page" : undefined} onClick={() => gehe("hin")} data-seite="hin"><span className="pd-nr">1</span> Zur KI</button>
-        <button type="button" className={seite === "zurueck" ? "active" : ""} aria-current={seite === "zurueck" ? "page" : undefined} onClick={() => gehe("zurueck")} data-seite="zurueck"><span className="pd-nr">2</span> Zurück</button>
+        {reiter("rein", <><LogIn size={16}/> Rein</>)}
+        {reiter("hin", <><span className="pd-nr">1</span> Zur KI</>)}
+        {reiter("zurueck", <><span className="pd-nr">2</span> Zurück</>)}
+        {reiter("raus", <><LogOut size={16}/> Raus</>)}
       </nav>
     </header>
     <main className="site-main pd-main">
-      <div hidden={seite !== "hin"}><HinSeite zumRueckweg={(id) => { setZurueckId(id); gehe("zurueck"); }}/></div>
+      {seite === "start" && <StartSeite gehe={gehe} beispiel={() => { gehe("hin"); setBeispiel((n) => n + 1); }}/>}
+      <div hidden={seite !== "rein"}><PruefSeite modus="rein"/></div>
+      <div hidden={seite !== "hin"}><HinSeite beispiel={beispiel} benutzt={() => { if (seite !== "hin") gehe("hin"); }} zumRueckweg={(id) => { setZurueckId(id); gehe("zurueck"); }}/></div>
       {seite === "zurueck" && <ZurueckSeite start={zurueckId}/>}
+      <div hidden={seite !== "raus"}><PruefSeite modus="raus"/></div>
     </main>
     <footer className="site-footer"><div className="footer-inner"><span className="leise">PseudoDoc {VARIANTE} {FASSUNG} · Maske aus der Familienakte · Teil der Pro-App-Familie · alles bleibt auf diesem Gerät</span> · <a href="./datenschutz.html">Impressum &amp; Datenschutz</a></div></footer>
   </>;
 }
 
+// ── Start: drei Wege ──────────────────────────────────────────────────────────────────────────────────────────────
+function StartSeite({ gehe, beispiel }: { gehe: (s: Seite) => void; beispiel: () => void }) {
+  const weg = (s: Seite, Symbol: typeof LogIn, titel: string, frage: string, text: string, haupt = false) =>
+    <button type="button" className={`pd-weg ${haupt ? "haupt" : ""}`} onClick={() => gehe(s)} data-weg={s}><Symbol size={30}/><strong>{titel}</strong><em>{frage}</em><span className="leise">{text}</span></button>;
+  return <section className="card pd-start" data-karte="start">
+    <h1>{UNTERTITEL}</h1>
+    <div className="pd-wege">
+      {weg("rein", LogIn, "Rein", "Kann ich das öffnen?", "Datei oder Mail prüfen, bevor du sie öffnest: versteckter Text, Anweisungen an eine KI, Makros, getarnte Programme.")}
+      {weg("hin", Sparkles, "Zur KI", "Mit der KI arbeiten, ohne Namen preiszugeben", "Pseudonymisiert hin, die Antwort zurück – mit den echten Angaben und geprüft.", true)}
+      {weg("raus", LogOut, "Raus", "Kann ich das weitergeben?", "Ort im Foto, Autor, Kommentare, versteckter Text – bereinigte Kopie, auf Wunsch pseudonymisiert.")}
+    </div>
+    <p className="leise pd-start-fuss">Alles auf diesem Gerät, nichts wird hochgeladen. · <button type="button" className="text-link" onClick={beispiel} data-beispiel>Beispiel ansehen</button></p>
+  </section>;
+}
+
 // ── 1 · Zur KI ──────────────────────────────────────────────────────────────────────────────────────────────────────
-function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
+function HinSeite({ zumRueckweg, beispiel, benutzt }: { zumRueckweg: (id: string) => void; beispiel: number; benutzt: () => void }) {
   const [eintraege, setEintraege] = useState<Eintrag[]>([]);
   const [stuecke, setStuecke] = useState<Stueck[]>([]);
   const [map, setMap] = useState<Record<string, string>>({});
@@ -147,6 +178,7 @@ function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
 
   async function einlesen(eingaenge: Eingang[]) {
     if (!eingaenge.length) { setMeldung({ text: "Es wurden keine Dateien übergeben.", art: "halt" }); return; }
+    benutztRef.current();
     setMeldung(null);
     let nr = eintraege.reduce((m, e) => Math.max(m, Number(e.kennung.slice(1))), 0);
     const neu: Eintrag[] = [];
@@ -161,6 +193,8 @@ function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
   }
 
   einlesenRef.current = einlesen;
+  const benutztRef = useRef(benutzt); benutztRef.current = benutzt;
+  useEffect(() => { if (beispiel) void beispielDateien().then((b) => einlesenRef.current(b)); }, [beispiel]);
   const ausFiles = async (l: FileList | File[]) => einlesen(await Promise.all([...l].map(async (f) => ({ pfad: (f as File & { webkitRelativePath?: string }).webkitRelativePath || f.name, name: f.name, bytes: new Uint8Array(await f.arrayBuffer()) }))));
   async function ausZiehen(dt: DataTransfer) {
     type E = { isFile: boolean; isDirectory: boolean; name: string; fullPath: string; file?: (ok: (f: File) => void, n: (e: unknown) => void) => void; createReader?: () => { readEntries: (ok: (l: E[]) => void, n: (e: unknown) => void) => void } };
@@ -253,7 +287,7 @@ function HinSeite({ zumRueckweg }: { zumRueckweg: (id: string) => void }) {
           <button type="button" className="button primary" onClick={() => dateiWahl.current?.click()} data-dateien-waehlen><FileText size={18}/> Dateien wählen</button>
           <button type="button" className="button" onClick={() => ordnerWahl.current?.click()}><FolderOpen size={18}/> Ordner</button>
           <button type="button" className="button" onClick={() => kamera.current?.click()}><Camera size={18}/> Foto</button>
-          {leer && <button type="button" className="button" onClick={async () => einlesen(await beispielDateien())} data-beispiel>Beispiel ansehen</button>}
+          {leer && <button type="button" className="button" onClick={async () => einlesen(await beispielDateien())} data-beispiel-hin>Beispiel ansehen</button>}
           {!leer && <button type="button" className="button" onClick={neuAnfangen} data-neu><RotateCcw size={18}/> Neu</button>}
         </div>
         <input ref={dateiWahl} type="file" multiple hidden onChange={(e) => { if (e.target.files) void ausFiles(e.target.files); e.target.value = ""; }} data-datei-eingabe/>
@@ -365,8 +399,17 @@ function Ansicht({ s, map, url, vorschau, darfBleiben, verdecken, meldung, abdec
   </>;
 }
 
+/** Rückweg-Bericht: Platzhalter und Neues (Kern) plus Prüfkern auf das Ergebnis (Anweisungen an eine KI, Links, Tarnung). */
+async function rueckBericht(antwort: string, ergebnis: string, map: Record<string, string>, gesendet: string): Promise<Punkt[]> {
+  const kern = rueckwegPruefen(antwort, ergebnis, map, gesendet);
+  const pk = ausBefunden(await pruefeMail(ergebnis).catch(() => [])).filter((x) => !/UNSICHTBARE-ZEICHEN|LINK-|MAILADRESSE|IBAN|TELEFON/.test(x.kennung) || x.stufe === "achtung")
+    .filter((x) => !kern.some((k) => k.kennung === x.kennung));
+  const alle = [...kern.filter((k) => k.stufe !== "ok"), ...pk];
+  return alle.length ? alle : kern;
+}
+
 // ── 2 · Zurück ──────────────────────────────────────────────────────────────────────────────────────────────────────
-type Ergebnis = (Zurueck & { art: "text" }) | { art: "bild"; name: string; url: string; blob: Blob; hinweis: string };
+type Ergebnis = (Zurueck & { art: "text"; antwort: string; bericht: Punkt[] }) | { art: "bild"; name: string; url: string; blob: Blob; hinweis: string };
 
 function ZurueckSeite({ start }: { start: string }) {
   const [liste, setListe] = useState<speicher.Auftrag[] | null>(null);
@@ -387,7 +430,9 @@ function ZurueckSeite({ start }: { start: string }) {
     const erkannt = antworten.map((a) => a.text && auftragAusText(a.text)).find(Boolean);
     if (erkannt && erkannt !== id && liste?.some((x) => x.id === erkannt)) { setId(erkannt); g = await speicher.laden(erkannt); setMeldung({ text: "Auftrag an der Kennung in der Antwort erkannt." }); }
     if (!g) { setMeldung({ text: "Bitte zuerst den Auftrag wählen.", art: "halt" }); return; }
-    const neu: Ergebnis[] = antwortenZurueck(p, antworten.filter((a) => a.text != null).map((a) => ({ name: a.name, text: a.text! })), g.map).map((z) => ({ ...z, art: "text" as const }));
+    const texte = antworten.filter((a) => a.text != null).map((a) => ({ name: a.name, text: a.text! }));
+    const gesendet = g.auftrag.stuecke.map((s) => s.fassung || "").join("\n");
+    const neu: Ergebnis[] = await Promise.all(antwortenZurueck(p, texte, g.map).map(async (z, k) => ({ ...z, art: "text" as const, antwort: texte[k].text, bericht: await rueckBericht(texte[k].text, z.text, g!.map, gesendet) })));
     for (const a of antworten.filter((x) => x.bild)) {
       const k = a.name.match(/D\d{2,}/)?.[0];
       const st = g.auftrag.stuecke.find((s) => s.kennung === k);
@@ -406,6 +451,12 @@ function ZurueckSeite({ start }: { start: string }) {
     })));
   }
   const aendern = (i: number, text: string) => setErgebnisse(ergebnisse.map((e, k) => (k === i && e.art === "text" ? { ...e, text } : e)));
+  async function neuPruefen(i: number, text?: string) {
+    const e = ergebnisse[i]; if (e.art !== "text" || !geladen) return;
+    const t = text ?? e.text;
+    const bericht = await rueckBericht(e.antwort, t, geladen.map, geladen.auftrag.stuecke.map((s) => s.fassung || "").join("\n"));
+    setErgebnisse((alt) => alt.map((x, k) => (k === i && x.art === "text" ? { ...x, text: t, bericht } : x)));
+  }
   const loeschen = (i: number) => { const e = ergebnisse[i]; if (e.art === "bild") URL.revokeObjectURL(e.url); setErgebnisse(ergebnisse.filter((_, k) => k !== i)); };
   const tage = (a: speicher.Auftrag) => Math.max(0, Math.ceil((a.geaendert + speicher.HALTBAR_TAGE * 864e5 - Date.now()) / 864e5));
   async function sichern(a: speicher.Auftrag) {
@@ -439,11 +490,15 @@ function ZurueckSeite({ start }: { start: string }) {
           {e.art === "text" ? <>{e.ersetzt > 0 && <span className="badge gut">{e.ersetzt} Angaben eingesetzt</span>}{e.offen.length > 0 && <span className="badge pruefen" data-offen>unbekannt: {e.offen.join(", ")}</span>}</> : <span className="leise">{e.hinweis}</span>}
         </div>
         {e.art === "text" ? <>
+          <BerichtAnzeige titel="Rückweg geprüft" punkte={e.bericht}/>
           <textarea className="ergebnis-text" rows={Math.min(18, Math.max(5, e.text.split("\n").length + 1))} value={e.text} onChange={(x) => aendern(i, x.target.value)} data-ergebnis-text/>
           <div className="button-row">
             <button type="button" className="button klein primary" onClick={async () => setMeldung((await kopieren(e.text, null)) !== "nichts" ? { text: "Kopiert.", art: "gut" } : { text: "Kopieren ging nicht.", art: "halt" })} data-ergebnis-kopieren><Copy size={16}/> Kopieren</button>
             <button type="button" className="button klein" onClick={() => void herunterladen(e.name.replace(/\.md$/, ".docx"), new Blob([docxBauen(e.text) as BlobPart], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }))} data-word><FileDown size={16}/> Word</button>
             <button type="button" className="button klein" onClick={() => void herunterladen(e.name, e.text, "text/markdown;charset=utf-8")}><FileDown size={16}/> Text</button>
+            <button type="button" className="button klein" onClick={() => void neuPruefen(i)} data-rueck-pruefen><RotateCcw size={16}/> Erneut prüfen</button>
+            {(e.text.match(UNSICHTBAR) || []).length > 0 && <button type="button" className="button klein" onClick={() => void neuPruefen(i, sauber(e.text))} data-unsichtbar-weg>Unsichtbare Zeichen entfernen</button>}
+            {teilenMoeglich([new File([e.text], "x.txt", { type: "text/plain" })]) && <button type="button" className="button klein" onClick={() => void teilen(e.text, [])} data-ergebnis-teilen><Share2 size={16}/> Teilen …</button>}
             <button type="button" className="button klein" onClick={() => loeschen(i)} data-ergebnis-loeschen><Trash2 size={16}/> Löschen</button>
           </div>
         </> : <>

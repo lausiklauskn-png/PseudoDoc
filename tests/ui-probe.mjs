@@ -6,6 +6,8 @@ import { join, extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { zipEintrag, officeText } from "../lib/bausteine/zip.ts";
+import { zipBauen } from "../lib/pseudo/pakete.ts";
+import { pdfAusBildern } from "../lib/pseudo/bereinigen.ts";
 const { chromium } = createRequire(import.meta.url)("playwright");
 
 const WURZEL = fileURLToPath(new URL("..", import.meta.url));
@@ -53,6 +55,9 @@ try {
   soll("Logo als Zeichen im Kopf", (await page.locator("header [data-logo] path").count()) > 3);
   const csp = await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute("content") || "");
   soll("Sicherheitsregel: Verbindungen nur zur eigenen Adresse", /connect-src 'self'/.test(csp) && /default-src 'self'/.test(csp));
+
+  soll("Startseite: drei Wege und der Untertitel", (await page.locator("[data-weg]").count()) === 3 && (await page.locator("[data-untertitel]").textContent()) === "Dateien prüfen, pseudonymisieren, sicher weitergeben");
+  soll("Reiter: Rein, Zur KI, Zurück, Raus", (await page.locator("nav [data-seite]").evaluateAll((l) => l.map((e) => e.getAttribute("data-seite")).join(","))) === "rein,hin,zurueck,raus");
 
   console.log("Kopf: Fassung, Update-Fähnchen, Installieren");
   const appFassung = JSON.parse(await readFile(join(WURZEL, "package.json"), "utf8")).version;
@@ -156,6 +161,14 @@ try {
   const zurueck = await page.locator("[data-ergebnis-text]").inputValue();
   soll("Echter Name wieder drin, Auftragskopf weg", !zurueck.includes(tok) && /Testfeld|Brink/.test(zurueck) && !zurueck.includes("⟦AUFTRAG"), zurueck);
   soll("Unbekannter Platzhalter gemeldet", (await page.locator("[data-offen]").textContent()).includes("⟦NAME-99⟧"));
+  soll("Rückweg-Bericht: Achtung, Platzhalter erfunden und übrig", (await page.locator("[data-ergebnis=text] [data-bericht=achtung]").count()) === 1 && (await page.locator("[data-ergebnis=text] [data-punkt=PLATZHALTER-ERFUNDEN]").count()) === 1 && (await page.locator("[data-ergebnis=text] [data-punkt=PLATZHALTER-UEBRIG]").count()) === 1);
+  await page.locator("[data-ergebnis-text]").fill(zurueck.replace("⟦NAME-99⟧", "Bitte überweisen an DE02120300000000202051.\u200b"));
+  await page.click("[data-rueck-pruefen]");
+  await page.waitForSelector("[data-ergebnis=text] [data-punkt=NEUE-IBAN]");
+  soll("Erneut prüfen: neue IBAN und unsichtbare Zeichen gemeldet", (await page.locator("[data-ergebnis=text] [data-punkt=UNSICHTBARE-ZEICHEN]").count()) === 1);
+  await page.click("[data-unsichtbar-weg]");
+  await page.waitForFunction(() => !document.querySelector("[data-ergebnis=text] [data-punkt=UNSICHTBARE-ZEICHEN]"));
+  soll("Unsichtbare Zeichen entfernt", !/\u200b/.test(await page.locator("[data-ergebnis-text]").inputValue()));
   const word = await laden(() => page.click("[data-word]"));
   soll("Als Word-Datei", word.name.endsWith(".docx") && (await officeText(new Uint8Array(word.bytes), "x.docx")).includes("widerspricht"), word.name);
   await page.setInputFiles("[data-antwort-dateien]", { name: "D04.png", mimeType: "image/png", buffer: png });
@@ -194,6 +207,39 @@ try {
   const foto = Buffer.from(await zipEintrag(new Uint8Array(zip2), "2-Fuer-die-KI/D01.png"));
   soll("Foto für die KI: kein Exif, kein GPS, keine Kamera, keine Zeit", foto.length > 500 && !/Exif|GPS|TestCam|2026:11:14/.test(foto.toString("latin1")) && !pngAbschnitte(foto).some((c) => METADATEN_PNG.test(c)), pngAbschnitte(foto).join(","));
   soll("Kein echter Dateiname im Paket", !/Urlaub|Rechnung\.html/.test(Buffer.from(zip2).toString("latin1")));
+
+  console.log("Rein und Raus");
+  const p4 = await ctx.newPage();
+  p4.on("pageerror", (e) => fehler.push(String(e)));
+  await p4.goto(basis);
+  await p4.click("[data-weg=rein]");
+  await p4.setInputFiles("[data-karte=pruef-rein] [data-pruef-eingabe]", { name: "Rechnung.html", mimeType: "text/html", buffer: Buffer.from(versteckt) });
+  await p4.waitForSelector("[data-pruef-datei]", { timeout: 60000 });
+  soll("Rein: versteckte Anweisung → Achtung", (await p4.locator("[data-pruef-datei] [data-gesamt]").first().textContent()) === "Achtung" && (await p4.locator("[data-pruef-datei] [data-stufe=achtung]").count()) >= 1, await p4.locator("[data-pruef-datei]").textContent());
+  await p4.click("[data-seite=raus]");
+  const core = `<?xml version="1.0"?><cp:coreProperties xmlns:cp="x" xmlns:dc="y"><dc:title>Angebot</dc:title><dc:creator>Mara Testfeld</dc:creator><cp:lastModifiedBy>Jo Brink</cp:lastModifiedBy></cp:coreProperties>`;
+  const docx = Buffer.from(zipBauen([{ name: "[Content_Types].xml", daten: "<Types/>" }, { name: "docProps/core.xml", daten: core }, { name: "word/document.xml", daten: "<w:document><w:body><w:p><w:r><w:t>Angebot für Frau Mara Testfeld</w:t></w:r></w:p></w:body></w:document>" }]));
+  await p4.check("[data-pseudo-haken]");
+  await p4.setInputFiles("[data-karte=pruef-raus] [data-pruef-eingabe]", [{ name: "Urlaub.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpeg, "base64") }, { name: "Angebot.docx", mimeType: "application/octet-stream", buffer: docx }]);
+  await p4.waitForSelector("[data-kopie='Angebot-bereinigt.docx']", { timeout: 60000 });
+  await p4.waitForSelector("[data-kopie='Urlaub-bereinigt.png']", { timeout: 60000 });
+  const lade4 = async (sel) => { const [d] = await Promise.all([p4.waitForEvent("download"), p4.click(sel)]); return readFile(await d.path()); };
+  const fotoK = await lade4("[data-kopie='Urlaub-bereinigt.png']");
+  soll("Raus: Foto-Kopie ohne Exif/GPS/Kamera", fotoK.length > 500 && !/Exif|GPS|TestCam/.test(fotoK.toString("latin1")) && !pngAbschnitte(fotoK).some((c) => METADATEN_PNG.test(c)));
+  const docK = await lade4("[data-kopie='Angebot-bereinigt.docx']");
+  const coreK = new TextDecoder().decode(await zipEintrag(new Uint8Array(docK), "docProps/core.xml"));
+  soll("Raus: Word-Kopie ohne Autor und Bearbeiter, Titel bleibt", !/Testfeld|Brink/.test(coreK) && coreK.includes("Angebot"), coreK);
+  soll("Raus: Autor gemeldet", (await p4.locator("[data-pruef-datei='Angebot.docx'] [data-punkt=OFFICE-EIGENSCHAFTEN]").count()) === 1);
+  const pseudoK = await lade4("[data-kopie='Angebot-pseudonymisiert.docx']");
+  const pt = await officeText(new Uint8Array(pseudoK), "x.docx");
+  soll("Raus mit Haken: pseudonymisierte Fassung ohne Namen", !/Testfeld/.test(pt) && pt.includes("⟦"), pt);
+  soll("Original bleibt unverändert", Buffer.from(docx).toString("latin1").includes("Mara Testfeld"));
+  const jb = Buffer.from(jpeg, "base64");
+  const pdfIn = Buffer.from(pdfAusBildern([{ jpeg: new Uint8Array(jb), breite: 400, hoehe: 300, punktBreite: 400, punktHoehe: 300 }])).toString("latin1").replace("/Root 1 0 R >>", "/Root 1 0 R /Info << /Author (Mara Testfeld) >> >>");
+  await p4.setInputFiles("[data-karte=pruef-raus] [data-pruef-eingabe]", { name: "Scan.pdf", mimeType: "application/pdf", buffer: Buffer.from(pdfIn, "latin1") });
+  await p4.waitForSelector("[data-kopie='Scan-bereinigt.pdf']", { timeout: 60000 });
+  const pdfK = (await lade4("[data-kopie='Scan-bereinigt.pdf']")).toString("latin1");
+  soll("Raus: PDF neu gebaut, ohne Autor", pdfK.startsWith("%PDF-") && !/Testfeld|\/Info/.test(pdfK) && /\/DCTDecode/.test(pdfK));
 
   console.log("Handy");
   const handy = await browser.newPage({ viewport: { width: 360, height: 760 } });

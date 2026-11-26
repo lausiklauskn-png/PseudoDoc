@@ -30,10 +30,10 @@ export type Gelesen = { stueck: Omit<Stueck, "kennung">; original: Eingang | nul
 export const SCAN_SEITEN = 20;
 const MAX_BYTES = 60 * 1024 * 1024;
 
-type PdfDoc = { numPages: number; getPage: (n: number) => Promise<{ getViewport: (o: { scale: number }) => { width: number; height: number }; render: (o: { canvasContext: CanvasRenderingContext2D; viewport: unknown }) => { promise: Promise<void> } }>; destroy: () => Promise<void> };
+export type PdfDoc = { numPages: number; getPage: (n: number) => Promise<{ getViewport: (o: { scale: number }) => { width: number; height: number }; render: (o: { canvasContext: CanvasRenderingContext2D; viewport: unknown }) => { promise: Promise<void> } }>; destroy: () => Promise<void> };
 type PdfJs = { getDocument: (o: Record<string, unknown>) => { promise: Promise<PdfDoc> } };
 let pdfjsBereit: Promise<PdfJs> | null = null;
-async function pdfjs(): Promise<PdfJs> {
+export async function pdfjs(): Promise<PdfJs> {
   if (!pdfjsBereit) pdfjsBereit = (async () => {
     const [p, w] = await Promise.all([import("pdfjs-dist"), import("pdfjs-dist/build/pdf.worker.min.mjs?url")]);
     p.GlobalWorkerOptions.workerSrc = w.default;

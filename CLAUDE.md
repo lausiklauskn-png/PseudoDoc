@@ -64,3 +64,18 @@ Der Marktplatz Spezial (family-project `server/spezial/`) holt APK und Installer
 Installer 0.1.0 lag nur auf `family-projekt.de/updates/pseudodoc/`. Seitdem hängt `windows-release.yml` ihn zusätzlich an das
 Release (nach Android, sonst Abbruch); für 0.1.0 einmalig `windows-an-release.yml` (holt die Datei vom Update-Server, prüft sie gegen
 die SHA-256 im Nachweis, hängt sie an – kein neuer Bau, keine neue Fassung).
+
+## 0.2.0 – Dateien prüfen, pseudonymisieren, sicher weitergeben (Klaus 26.11.2026)
+
+Plan und Klaus' Antworten: `docs/PLAN_2026-11-26_PRUEFEN-PSEUDONYMISIEREN-WEITERGEBEN.md`. Auslieferungsprüfer und Sende-Prüfer
+gehen in PseudoDoc auf. Startseite mit drei Wegen (`StartSeite` in `src/app.tsx`, Hash `#rein`, `#hin`, `#zurueck`, `#raus`; leer = Start):
+- **Rein** (`PruefSeite modus="rein"`, `src/pruefen.tsx`): Prüfkern auf Datei/Mail, Bericht Achtung · Hinweis · In Ordnung.
+- **Zur KI / Zurück** wie bisher; das Zurückholen prüft das Ergebnis (`lib/pseudo/rueckweg.ts` + `pruefeMail`): Platzhalter übrig/erfunden/
+  fehlt, neue Links, IBAN, Mail, Telefon, unsichtbare Zeichen; „Erneut prüfen“, „Unsichtbare Zeichen entfernen“, Teilen.
+- **Raus** (`PruefSeite modus="raus"`): Prüfung + personenbezogene Angaben + bereinigte Kopie (`lib/pseudo/bereinigen.ts`: Bild neu gezeichnet,
+  PDF aus Seitenbildern, Office ohne Autor/Firma, Text ohne unsichtbare Zeichen). Pseudonymisieren nur mit Haken (Word/Text, ohne gemerkte
+  Zuordnung). Original bleibt unverändert. Kein Virenscanner – das steht auf beiden Seiten.
+- `data-beispiel` steht auf der Startseite (die nativen Proben klicken es); der Knopf in „Zur KI“ heißt `data-beispiel-hin`.
+- Proben: Kern 80, Oberfläche 64, native 67, Windows-Engine 64. Am Gerät ungeprüft. APK/Windows 0.2.0 nur mit Klaus' Wort.
+- ⚠ Offen: `manifest.webmanifest` trägt `"id": "./"` – Chrome rechnet das laut Mixarium-Messung vom Ursprung aus (Kollision mit anderen
+  Apps auf github.io möglich). Nicht geändert, weil es die Kennung schon installierter Web-Apps änderte; mit Klaus klären.

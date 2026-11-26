@@ -1,9 +1,9 @@
 {
   "name": "pseudodoc",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "PseudoDoc – Dateien rein, pseudonymisiert zur KI, Antwort zurück. Alles auf dem Gerät.",
+  "description": "PseudoDoc – Dateien prüfen, pseudonymisieren, sicher weitergeben. Alles auf dem Gerät.",
   "engines": {
     "node": ">=22.18.0"
   },
