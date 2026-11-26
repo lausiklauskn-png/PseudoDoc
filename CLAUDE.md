@@ -8,7 +8,7 @@ Diese Datei liest jede Sitzung zuerst.
 Flächen) → mit einem Klick zur KI (ChatGPT, Claude, Claude Code, Gemini: Text + Bild in die Zwischenablage, Seite öffnet sich) →
 Antwort zurück → echte Angaben wieder drin. **Einfach in der Bedienung, höchster Stand in der Technik** (Klaus: „einfach, aber genial“ ·
 „Einfach bedeutet nicht niedriger Standard … höher als die Familienakte“). Teil der Pro-App-Familie: Basic = Web-App (Pages),
-**Pro = Android/Windows** (**0.1.0 veröffentlicht 14.11., nicht erneut ausgeben; nächste 0.1.1**, Nachweis `docs/VEROEFFENTLICHUNG-0.1.0.json`; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
+**Pro = Android/Windows** (**0.2.0 veröffentlicht 26.11., nicht erneut ausgeben; nächste 0.2.1**, Nachweise `docs/VEROEFFENTLICHUNG-0.2.0.json`, `-0.1.0.json`; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
 
 Adresse: https://lausiklauskn-png.github.io/PseudoDoc/ (leitet auf `app/`). Plan, Stand, Fragen: `docs/PLAN.md`.
 
@@ -76,7 +76,7 @@ gehen in PseudoDoc auf. Startseite mit drei Wegen (`StartSeite` in `src/app.tsx`
   PDF aus Seitenbildern, Office ohne Autor/Firma, Text ohne unsichtbare Zeichen). Pseudonymisieren nur mit Haken (Word/Text, ohne gemerkte
   Zuordnung). Original bleibt unverändert. Kein Virenscanner – das steht auf beiden Seiten.
 - `data-beispiel` steht auf der Startseite (die nativen Proben klicken es); der Knopf in „Zur KI“ heißt `data-beispiel-hin`.
-- Proben: Kern 80, Oberfläche 64, native 67, Windows-Engine 64. Am Gerät ungeprüft. APK/Windows 0.2.0 nur mit Klaus' Wort.
+- Proben: Kern 80, Oberfläche 64, native 67, Windows-Engine 64. Am Gerät ungeprüft. **APK/Windows 0.2.0 veröffentlicht 26.11.** (Nachweis `docs/VEROEFFENTLICHUNG-0.2.0.json`).
 - Manifest-Kennung (Klaus 26.11.: „gleich angleichen“): `"id": "/PseudoDoc/app/"` statt `"./"` (das rechnet Chrome vom Ursprung aus,
   dieselbe Kennung wie andere Apps auf github.io). Wer die Web-App schon installiert hatte, installiert sie einmal neu. Vorrat `pseudodoc-v3`.
   Probe in `test-native.mjs`.
