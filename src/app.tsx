@@ -95,12 +95,12 @@ function StartSeite({ gehe, beispiel }: { gehe: (s: Seite) => void; beispiel: ()
     <button type="button" className={`pd-weg ${haupt ? "haupt" : ""}`} onClick={() => gehe(s)} data-weg={s}><Symbol size={30}/><strong>{titel}</strong><em>{frage}</em><span className="leise">{text}</span></button>;
   return <section className="card pd-start" data-karte="start">
     <h1>{UNTERTITEL}</h1>
+    <p className="leise pd-start-fuss">Alles auf diesem Gerät, nichts wird hochgeladen. · <button type="button" className="text-link" onClick={beispiel} data-beispiel>Beispiel ansehen</button></p>
     <div className="pd-wege">
       {weg("rein", LogIn, "Rein", "Kann ich das öffnen?", "Datei oder Mail prüfen, bevor du sie öffnest: versteckter Text, Anweisungen an eine KI, Makros, getarnte Programme.")}
       {weg("hin", Sparkles, "Zur KI", "Mit der KI arbeiten, ohne Namen preiszugeben", "Pseudonymisiert hin, die Antwort zurück – mit den echten Angaben und geprüft.", true)}
       {weg("raus", LogOut, "Raus", "Kann ich das weitergeben?", "Ort im Foto, Autor, Kommentare, versteckter Text – bereinigte Kopie, auf Wunsch pseudonymisiert.")}
     </div>
-    <p className="leise pd-start-fuss">Alles auf diesem Gerät, nichts wird hochgeladen. · <button type="button" className="text-link" onClick={beispiel} data-beispiel>Beispiel ansehen</button></p>
   </section>;
 }
 

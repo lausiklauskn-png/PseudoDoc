@@ -244,6 +244,7 @@ try {
   console.log("Handy");
   const handy = await browser.newPage({ viewport: { width: 360, height: 760 } });
   await handy.goto(basis);
+  soll("Handy: „Beispiel ansehen“ ist ohne Rollen zu sehen (die Android-Probe tippt dorthin)", await handy.evaluate(() => { const r = document.querySelector("[data-beispiel]").getBoundingClientRect(); return r.bottom > 0 && r.bottom <= innerHeight; }));
   await handy.click("[data-beispiel]");
   await handy.waitForSelector("[data-stueck=D04]", { timeout: 180000 });
   soll("Handy: nichts läuft quer", await handy.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
