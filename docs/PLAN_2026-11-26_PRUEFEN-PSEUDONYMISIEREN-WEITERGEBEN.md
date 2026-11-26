@@ -65,8 +65,40 @@ Je Weg eine Browser-Probe mit erfundenen Dateien (Foto mit Ortsangabe, PDF mit v
 mit KI-Anweisung); die bereinigte Kopie wird **byte-genau nachgelesen** (keine Ortsangabe mehr, kein Autor, Original unverändert).
 Gegenproben: je Riegel ein Fall. Bestehende Proben (52 Web, 67 nativ, 64 Windows) bleiben grün.
 
-## Fragen an Klaus
+## Klaus' Antworten (26.11.2026)
 
-- F1 Reihenfolge der drei Wege auf der Startseite: Rein · Zur KI · Raus (so vorgeschlagen) oder „Zur KI“ zuerst, weil es heute der Kern ist?
-- F2 Soll „Raus“ ab Werk auch pseudonymisieren, oder nur auf Haken?
-- F3 Spezial-Karte und Marktplatz-Text gleich mit 0.2.0 umstellen?
+- F1 Reihenfolge bleibt **Rein · Zur KI · Raus**.
+- F2 „Raus“ pseudonymisiert **nur auf Haken**.
+- F3 Marktplatz-Karten (family-projekt.de, PWA Toolpoint) und Spezial-Karte **gleich mit 0.2.0** umstellen.
+
+## Der Rückweg wird geprüft (Klaus 26.11.: „ob ich beim Zurückweg auch Fehler gemacht habe … raus und wieder rein“)
+
+Heute setzt „2 · Zurück“ die echten Angaben ein und meldet unbekannte Platzhalter gelb. Neu: das Ergebnis geht **von selbst noch
+einmal durch die Prüfung**, bevor es gespeichert oder weitergegeben wird. Der Bericht sagt:
+
+| Prüfung | Befund |
+|---|---|
+| alle Platzhalter ersetzt | Achtung, wenn noch ein ⟦…⟧ im Text steht (verändert, erfunden oder abgeschnitten) |
+| Platzhalter der KI, die es im Auftrag nie gab | Achtung (vorhanden als „unbekannt“, wird Teil des Berichts) |
+| fehlende Platzhalter | Hinweis: diese echten Angaben kommen in der Antwort nicht mehr vor (die KI hat etwas weggelassen) |
+| neue Links, Mailadressen, Telefonnummern, IBAN, die nicht im Original standen | Hinweis: von der KI eingefügt, bitte prüfen |
+| Anweisungen an eine KI, versteckter Text, unsichtbare Zeichen in der Antwort | Achtung (Prüfkern, wie bei „Rein“) |
+
+Danach dieselben Ausgänge wie bei „Raus“: **Speichern** (Pro: gewählter Ordner, Web: Download), **Teilen**, **Kopieren**, Word/Text;
+auf Haken bereinigte Kopie. So schließt sich der Kreis: **rein → zur KI → zurück → geprüft → raus**.
+
+**Getestet** wird der Kreis als Rundlauf mit erfundenen Unterlagen: pseudonymisieren, eine gestellte KI-Antwort (mit einem
+veränderten, einem erfundenen und einem fehlenden Platzhalter sowie einem eingeschmuggelten Link) zurückholen, jeder Befund muss mit
+seinem Namen im Bericht stehen; ohne Fehler muss der Text Zeichen für Zeichen dem Original-Wortlaut entsprechen.
+
+## Wie die Datei zur KI kommt (Klaus: „muss ich eine Auswahl haben für die KIs oder kann ich das weitergeben?“)
+
+Beides gibt es schon in PseudoDoc 0.1.0 und bleibt so:
+
+- **Auswahl**: Knöpfe ChatGPT · Claude · Claude Code · Gemini. Ein Tipp legt Text und Bild in die Zwischenablage und öffnet die Seite;
+  dort einfügen. Kein Schlüssel, kein Konto in PseudoDoc, nichts geht direkt aus der App ins Netz.
+- **Weitergeben**: „Teilen“ (am Handy direkt an die App der KI), „Nur kopieren“, „Als Datei“, ZIP – für jede andere KI.
+
+Nicht drin, mit Absicht: Senden über einen eigenen Schlüssel (wie Mistral in Familienakte und Private Brain Pro). Das bräche die
+Zusicherung „nichts geht aus der App ins Netz“ (`connect-src 'self'`). Wenn gewünscht, später nur in Pro und nur auf Haken – **eigene
+Frage an Klaus, nicht Teil von 0.2.0**.
