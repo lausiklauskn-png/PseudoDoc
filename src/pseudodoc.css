@@ -40,3 +40,21 @@ kbd { font: 700 .78rem ui-monospace, monospace; background: #fff; border: 1px so
 .pd-installieren:hover { filter: brightness(1.08); }
 @media (max-width: 560px) { .pd-installieren span { display: none; } .pd-installieren { padding: 8px; } .site-brand small { display: none; } }
 @media (display-mode: standalone) { .pd-installieren { display: none; } }
+
+/* 0.2.0 · Start mit drei Wegen, Prüfberichte */
+.pd-start h1 { font-size: 1.25rem; margin: 0 0 14px; }
+.pd-wege { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.pd-weg { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; padding: 16px; border: 1px solid var(--line, #d6e2ea); border-radius: 14px; background: var(--card, #fff); color: inherit; font: inherit; cursor: pointer; }
+.pd-weg:hover, .pd-weg:focus-visible { border-color: #54b8d2; box-shadow: 0 0 0 3px rgba(84, 184, 210, .25); }
+.pd-weg strong { font-size: 1.1rem; }
+.pd-weg em { font-style: normal; font-weight: 700; }
+.pd-weg.haupt { border-color: #54b8d2; background: linear-gradient(180deg, rgba(84, 184, 210, .12), transparent); }
+.pd-start-fuss { margin: 14px 0 0; }
+.pd-grenze { margin: 8px 0 0; display: flex; gap: 6px; align-items: center; }
+.pd-bericht { border-left: 4px solid var(--green); padding: 6px 10px; margin: 6px 0 10px; border-radius: 6px; background: var(--green-soft); }
+.pd-bericht.stufe-hinweis { border-color: var(--amber); background: var(--amber-soft); }
+.pd-bericht.stufe-achtung { border-color: var(--red); background: var(--red-soft); }
+.pd-bericht-kopf { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; overflow-wrap: anywhere; }
+.pd-bericht ul { margin: 6px 0 0; padding-left: 0; list-style: none; display: grid; gap: 4px; }
+.pd-bericht li { overflow-wrap: anywhere; }
+@media (max-width: 760px) { .pd-wege { grid-template-columns: 1fr; } .pd-reiter button { font-size: .8rem; padding-left: 4px; padding-right: 4px; } }

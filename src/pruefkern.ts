@@ -4,7 +4,8 @@
 export type Befund = { kennung: string; satz: string };
 type PF = { pruefePdf: (b: Uint8Array, erlaubt: string[]) => Promise<{ stellen: Array<{ kennung: string; satz: string }> }> };
 type PA = { pruefe: (name: string, b: Uint8Array) => Promise<{ befunde: Befund[]; text: string | null }> };
-type Welt = typeof globalThis & { PrueferFormate?: PF; PrueferAnhang?: PA };
+type PM = { pruefeMail: (roh: string) => { stellen: Befund[]; hinweise: string[]; text: string } };
+type Welt = typeof globalThis & { PrueferFormate?: PF; PrueferAnhang?: PA; PrueferMail?: PM };
 const welt = globalThis as Welt;
 const basis = () => new URL("vendor/", document.baseURI).href;
 
@@ -33,4 +34,10 @@ export async function pruefen(name: string, bytes: Uint8Array, art: string): Pro
   await skript("pruefkern/pruefer-anhang.js");
   const r = await welt.PrueferAnhang!.pruefe(name, bytes);
   return { befunde: r.befunde.map((x) => ({ kennung: x.kennung, satz: x.satz })), text: r.text };
+}
+
+/** Mail oder gewöhnlicher Text (auch die Antwort einer KI): versteckter Text, Anweisungen an eine KI, getarnte Links, Absender. */
+export async function pruefeMail(roh: string): Promise<Befund[]> {
+  await skript("pruefkern/pruefer-mail.js");
+  return welt.PrueferMail!.pruefeMail(roh).stellen.map((x) => ({ kennung: x.kennung, satz: x.satz }));
 }

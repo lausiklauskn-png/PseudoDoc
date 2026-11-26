@@ -1,0 +1,44 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PseudoDoc 0.2 – Vorschau Startseite</title>
+<style>
+:root{--grund:#f2f7fa;--blau:#0b3154;--hell:#e3edf5;--text:#13263a;--leise:#4b6177;--gruen:#1d7a4f;--gelb:#9a6a00;--rot:#b4232a}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,sans-serif;background:var(--grund);color:var(--text)}
+header{background:#fff;border-bottom:1px solid #d6e2ec;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(160deg,#2a6aa3,#0b3154)}
+header b{font-size:17px}header small{display:block;color:var(--leise);font-size:12.5px}
+.ver{margin-left:auto;font-size:12px;border:1px solid #c9d8e5;border-radius:999px;padding:2px 9px;color:var(--leise)}
+main{max-width:980px;margin:0 auto;padding:18px 16px}
+h1{font-size:19px;margin:4px 0 14px}
+.wege{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.weg{background:#fff;border:1px solid #d6e2ec;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.weg .kopf{display:flex;align-items:center;gap:10px}.weg .nr{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+.rein .nr{background:#2a6aa3}.ki .nr{background:#0b3154}.raus .nr{background:#1d7a4f}
+.weg h2{font-size:16px;margin:0}.weg .frage{color:var(--leise);font-size:13.5px;margin:0}
+.weg ul{margin:0;padding-left:18px;font-size:13.5px}.weg button{margin-top:auto;border:0;border-radius:9px;padding:9px 12px;font:inherit;font-weight:600;color:#fff;cursor:pointer}
+.rein button{background:#2a6aa3}.ki button{background:#0b3154}.raus button{background:#1d7a4f}
+.bericht{margin-top:16px;background:#fff;border:1px solid #d6e2ec;border-radius:12px;padding:12px 14px}
+.bericht h3{margin:0 0 8px;font-size:14.5px}.z{display:flex;gap:8px;align-items:baseline;font-size:13.5px;padding:3px 0}
+.p{border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;color:#fff;flex:none}.ok{background:var(--gruen)}.hin{background:var(--gelb)}.ach{background:var(--rot)}
+.fuss{margin-top:14px;color:var(--leise);font-size:12.5px}
+</style></head><body>
+<header><div class="logo"></div><div><b>PseudoDoc <span style="font-weight:500;color:#4b6177">Pro</span></b><small>Dateien prüfen, pseudonymisieren, sicher weitergeben</small></div><span class="ver">0.2.0</span></header>
+<main>
+<h1>Was möchtest du mit deiner Datei tun?</h1>
+<div class="wege">
+ <section class="weg rein"><div class="kopf"><span class="nr">1</span><div><h2>Rein</h2><p class="frage">Kann ich das öffnen?</p></div></div>
+  <ul><li>versteckter Text, Anweisungen an eine KI</li><li>Makros, getarnte Programme</li><li>fremde Links, Absender passt nicht</li></ul>
+  <button>Datei oder Mail prüfen</button></section>
+ <section class="weg ki"><div class="kopf"><span class="nr">2</span><div><h2>Zur KI</h2><p class="frage">Kann ich das einer KI zeigen?</p></div></div>
+  <ul><li>Namen und Nummern werden zu ⟦NAME-1⟧ …</li><li>Bilder schwarz abdecken</li><li>Antwort kommt mit echten Angaben zurück</li></ul>
+  <button>Pseudonymisieren</button></section>
+ <section class="weg raus"><div class="kopf"><span class="nr">3</span><div><h2>Raus</h2><p class="frage">Kann ich das weitergeben?</p></div></div>
+  <ul><li>Schlüssel, IBAN, Mailadressen gefunden?</li><li>Ort im Foto, Autor, Kommentare</li><li>bereinigte Kopie, Original bleibt</li></ul>
+  <button>Prüfen und bereinigen</button></section>
+</div>
+<div class="bericht"><h3>Beispiel-Bericht: angebot.docx (Raus)</h3>
+ <div class="z"><span class="p ach">Achtung</span>2 Kommentare mit Kundennamen – in der Kopie entfernt</div>
+ <div class="z"><span class="p hin">Hinweis</span>Autor „M. Muster“ – in der Kopie entfernt</div>
+ <div class="z"><span class="p ok">In Ordnung</span>kein versteckter Text, keine Makros</div>
+</div>
+<p class="fuss">Liest, schlägt vor, verändert nur eine Kopie. Kein Virenscanner · pseudonymisiert ist nicht anonym.</p>
+</main></body></html>

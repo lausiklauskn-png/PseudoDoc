@@ -7,6 +7,8 @@ import { box, drin, inBox, anfasserZiehen, vieleckDoppeltipp, Verlauf, ausPixeln
 import { zipBauen, docxBauen } from "../lib/pseudo/pakete.ts";
 import { zipEintrag, officeText } from "../lib/bausteine/zip.ts";
 import { runMaskeSelfTests } from "../lib/maske/maske.ts";
+import { rueckwegPruefen, gesamt } from "../lib/pseudo/rueckweg.ts";
+import { officeBereinigen, pdfAusBildern, kopieName } from "../lib/pseudo/bereinigen.ts";
 
 const welt = {};
 new Function("window", "self", "globalThis", readFileSync("src/public/vendor/maske/25_pseudonym.js", "utf8"))(welt, welt, welt);
@@ -86,6 +88,47 @@ ok("ZIP: gleicher Inhalt, gleiche Bytes", Buffer.compare(Buffer.from(zip), Buffe
 const doc = docxBauen("# Antwort\nSehr geehrter Herr Brink,\n**wichtig** & <klar>");
 const docText = await officeText(doc, "x.docx");
 ok("Word-Datei: Text kommt heraus", docText.includes("Sehr geehrter Herr Brink,") && docText.includes("wichtig & <klar>"), docText);
+
+// Rückweg prüfen (0.2.0): der ganze Kreis hin und zurück mit einer gestellten KI-Antwort.
+{
+  const gesendet = r.stuecke.map((s) => s.fassung).join("\n");
+  const tokBrink = Object.keys(r.map).find((k) => r.map[k] === "Ole Brink");
+  const sauberAntwort = `Sehr geehrter ${tokBrink},\nich bitte um Ratenzahlung.\nMit freundlichen Grüßen ${tokMara}`;
+  const z0 = antwortenZurueck(p, [{ name: "a.md", text: sauberAntwort }], r.map)[0];
+  const k0 = rueckwegPruefen(sauberAntwort, z0.text, r.map, gesendet);
+  ok("Rückweg ohne Fehler: Bericht „in Ordnung“", gesamt(k0.filter((x) => x.kennung !== "PLATZHALTER-FEHLT")) === "ok" && z0.text.includes("Ole Brink") && z0.text.includes("Mara Testfeld"), JSON.stringify(k0));
+  const kaputt = `Sehr geehrter ${tokBrink},\nbitte überweisen Sie an DE02 1203 0000 0000 2020 51, Infos unter https://raten.example/x.\nGruß ${tokMara.replace("-", "_")} und ⟦NAME-99⟧`;
+  const z1 = antwortenZurueck(p, [{ name: "b.md", text: kaputt }], r.map)[0];
+  const k1 = rueckwegPruefen(kaputt, z1.text, r.map, gesendet).map((x) => x.kennung);
+  for (const k of ["PLATZHALTER-UEBRIG", "PLATZHALTER-ERFUNDEN", "PLATZHALTER-FEHLT", "NEUER-LINK", "NEUE-IBAN"]) ok(`Rückweg: ${k} wird gemeldet`, k1.includes(k), k1.join(", "));
+  ok("Rückweg: eine IBAN aus den eigenen Unterlagen ist nicht neu", !rueckwegPruefen("DE89 3704 0044 0532 0130 00", "DE89 3704 0044 0532 0130 00", r.map, brief).some((x) => x.kennung === "NEUE-IBAN"));
+  ok("Rückweg: unsichtbare Zeichen im Ergebnis werden gemeldet", rueckwegPruefen("a", "a​b", {}, "").some((x) => x.kennung === "UNSICHTBARE-ZEICHEN"));
+}
+
+// Raus: bereinigte Kopie (0.2.0). Erfundene Word-Datei mit Autor, Firma, Kommentar, Änderungsverfolgung.
+{
+  const core = `<?xml version="1.0"?><cp:coreProperties xmlns:cp="x" xmlns:dc="y"><dc:title>Angebot</dc:title><dc:creator>Mara Testfeld</dc:creator><cp:lastModifiedBy>Ole Brink</cp:lastModifiedBy></cp:coreProperties>`;
+  const app = `<?xml version="1.0"?><Properties><Company>Hausverwaltung Brink</Company><Manager>Ole Brink</Manager></Properties>`;
+  const docx = zipBauen([{ name: "[Content_Types].xml", daten: "<Types/>" }, { name: "docProps/core.xml", daten: core }, { name: "docProps/app.xml", daten: app },
+    { name: "word/document.xml", daten: `<w:document><w:body><w:p><w:r><w:t>Angebot</w:t></w:r><w:ins w:author="Ole"><w:r><w:t>neu</w:t></w:r></w:ins><w:r><w:rPr><w:vanish/></w:rPr><w:t>geheim</w:t></w:r></w:p></w:body></w:document>` },
+    { name: "word/comments.xml", daten: `<w:comments><w:comment w:id="0" w:author="Mara"><w:p><w:r><w:t>Kunde zahlt schlecht</w:t></w:r></w:p></w:comment></w:comments>` }]);
+  const b = await officeBereinigen(docx);
+  const dec = new TextDecoder();
+  const core2 = dec.decode(await zipEintrag(b.bytes, "docProps/core.xml")), app2 = dec.decode(await zipEintrag(b.bytes, "docProps/app.xml"));
+  ok("Raus/Word: Autor, Bearbeiter, Firma, Vorgesetzter geleert, Titel bleibt", !/Mara|Brink/.test(core2 + app2) && core2.includes("<dc:title>Angebot</dc:title>"), core2 + app2);
+  const kn = b.punkte.map((x) => x.kennung);
+  for (const k of ["OFFICE-EIGENSCHAFTEN", "OFFICE-KOMMENTARE", "OFFICE-AENDERUNGEN", "OFFICE-VERSTECKT"]) ok(`Raus/Word: ${k} gemeldet`, kn.includes(k), kn.join(", "));
+  ok("Raus/Word: Inhalt des Dokuments unverändert", dec.decode(await zipEintrag(b.bytes, "word/document.xml")).includes("<w:t>Angebot</w:t>"));
+  ok("Raus: Original-Bytes unverändert", dec.decode(await zipEintrag(docx, "docProps/core.xml")) === core);
+  ok("Raus: kein ZIP → null statt Absturz", (await officeBereinigen(new TextEncoder().encode("kein zip"))) === null);
+  const jpeg = Uint8Array.from([0xff, 0xd8, 0xff, 0xd9]);
+  const pdf = pdfAusBildern([{ jpeg, breite: 10, hoehe: 20, punktBreite: 5, punktHoehe: 10 }, { jpeg, breite: 10, hoehe: 20, punktBreite: 5, punktHoehe: 10 }]);
+  const pt = Buffer.from(pdf).toString("latin1");
+  const xrefAn = Number(pt.match(/startxref\n(\d+)/)[1]);
+  const lagen = pt.slice(xrefAn).match(/^\d{10} 00000 n $/gm).map((z) => Number(z.slice(0, 10)));
+  ok("Raus/PDF: aus Seitenbildern, ohne Info und XMP, Querverweise stimmen", pt.startsWith("%PDF-1.4") && pt.trimEnd().endsWith("%%EOF") && !/\/Info|\/Metadata|\/Author/.test(pt) && /\/Count 2/.test(pt) && lagen.every((l, i) => pt.startsWith(`${i + 1} 0 obj`, l)), String(lagen));
+  ok("Raus: Name der Kopie", kopieName("Brief.docx") === "Brief-bereinigt.docx" && kopieName("Scan.pdf") === "Scan-bereinigt.pdf" && kopieName("Foto.jpg", ".png") === "Foto-bereinigt.png");
+}
 
 // Kein Netzweg in Kern und Oberfläche des Pseudonymisierers
 // Einzige erlaubte Abfrage: die eigene version.json (Update-Fähnchen der Web-App, src/kopf.tsx).
