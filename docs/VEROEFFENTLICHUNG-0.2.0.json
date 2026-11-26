@@ -1,0 +1,32 @@
+{
+  "app": "PseudoDoc Pro",
+  "fassung": "0.2.0",
+  "datum": "2026-11-26",
+  "freigabe": "Klaus 26.11.2026: „Ja, PseudoDoc 0.2.0 ausgeben“",
+  "inhalt": "Dateien prüfen, pseudonymisieren, sicher weitergeben: Startseite mit Rein · Zur KI · Raus, Rückweg-Prüfung, bereinigte Kopie; Web-App-Kennung /PseudoDoc/app/.",
+  "android": {
+    "datei": "PseudoDoc-Pro-0.2.0.apk",
+    "versionCode": 20,
+    "bytes": 12219972,
+    "sha256": "c5202bffa2c3098119397ee75c7ed8424ac69766d2c13a9cf2bf5f697146269d",
+    "zertifikat_sha256": "53bea630e03851d72b0757730297a757af317e88cb9343e181a370cf50ad52b9",
+    "commit": "cacad90da51798bcc037473235b7465d99bf4375",
+    "lauf": 45860250763,
+    "release": "https://github.com/lausiklauskn-png/PseudoDoc/releases/tag/v0.2.0",
+    "geprueft": "Emulator: Erstinstallation, Beispiel, Überinstallieren (verify-signed-install.py); öffentlicher Download in der Sitzung nachgerechnet, gleich .sha256 und .json",
+    "erster_lauf": "45856630454 scheiterte in der Abnahme (Link „Beispiel ansehen“ unter dem Bildschirm, behoben mit #11); nichts veröffentlicht"
+  },
+  "windows": {
+    "datei": "PseudoDoc-Pro-Windows-0.2.0-x64-setup.exe",
+    "bytes": 24874379,
+    "sha256": "762636b7045786d52363a488ca28ce2dc35898d95c16677d7738e7e5433eb08c",
+    "commit": "cacad90da51798bcc037473235b7465d99bf4375",
+    "lauf": 45861174588,
+    "release": "https://github.com/lausiklauskn-png/PseudoDoc/releases/tag/v0.2.0",
+    "server": "https://family-projekt.de/updates/pseudodoc/PseudoDoc-Pro-Windows-0.2.0-x64-setup.exe",
+    "geprueft": "Download vom GitHub-Release in der Sitzung nachgerechnet, gleich der SHA-256 im Lauf"
+  },
+  "basic": "https://lausiklauskn-png.github.io/PseudoDoc/",
+  "nicht_am_geraet": "Kein echtes Android-Gerät, kein Windows-PC geprüft",
+  "naechste_fassung": "0.2.1"
+}
