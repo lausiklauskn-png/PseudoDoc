@@ -39,6 +39,8 @@ const gradle = await lies('android/app/build.gradle'), strings = await lies('and
 soll('Paket de.familyprojekt.pseudodoc überall', cap.appId === 'de.familyprojekt.pseudodoc' && gradle.includes('applicationId "de.familyprojekt.pseudodoc"') && gradle.includes('namespace = "de.familyprojekt.pseudodoc"'));
 soll('App heißt „PseudoDoc Pro“', cap.appName === 'PseudoDoc Pro' && strings.includes('<string name="app_name">PseudoDoc Pro</string>'));
 soll('Web-App heißt „PseudoDoc Basic“', JSON.parse(await lies('src/public/manifest.webmanifest')).name === 'PseudoDoc Basic');
+// Chrome rechnet die id vom Ursprung aus (lausiklauskn-png.github.io): „./“ wäre dieselbe Kennung wie bei anderen Apps dort.
+soll('Web-App: eigene Kennung im eigenen Ordner (/PseudoDoc/app/)', JSON.parse(await lies('src/public/manifest.webmanifest')).id === '/PseudoDoc/app/');
 soll('webDir www, keine Fehlersuche in der WebView', cap.webDir === 'www' && cap.android?.webContentsDebuggingEnabled === false && cap.android?.allowMixedContent === false);
 
 console.log('Fassung');

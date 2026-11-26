@@ -1,4 +1,4 @@
-{ "name": "PseudoDoc Basic", "short_name": "PseudoDoc", "description": "Dateien prüfen, pseudonymisieren, sicher weitergeben – alles auf dem Gerät.", "lang": "de", "id": "./", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#f2f7fa", "theme_color": "#0b3154",
+{ "name": "PseudoDoc Basic", "short_name": "PseudoDoc", "description": "Dateien prüfen, pseudonymisieren, sicher weitergeben – alles auf dem Gerät.", "lang": "de", "id": "/PseudoDoc/app/", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#f2f7fa", "theme_color": "#0b3154",
   "icons": [
     { "src": "pseudodoc-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "pseudodoc-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
