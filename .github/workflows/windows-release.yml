@@ -65,6 +65,8 @@ jobs:
     needs: bauen
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -109,3 +111,17 @@ jobs:
           D=$(ls hoch/*.exe | xargs -n1 basename)
           curl -fsS "$B/$D" | sha256sum | grep -q "$(sha256sum "hoch/$D" | cut -d' ' -f1)"
           echo "Veröffentlicht: $B/$D"
+      # Klaus 2026-11-26: der Marktplatz Spezial holt die Dateien vom GitHub-Release, nicht vom Update-Server.
+      # Der Installer kommt deshalb zusätzlich an das Release v<Fassung> (das legt „PseudoDoc Pro Android
+      # veröffentlichen“ an; fehlt es, bricht dieser Schritt ab, statt ein Release zu erfinden). Nie überschreiben.
+      - name: An das GitHub-Release v<Fassung> hängen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          V=$(node -p "require('./package.json').version")
+          D=$(ls hoch/*.exe | xargs -n1 basename)
+          gh release view "v$V" >/dev/null || { echo "::error::Release v$V fehlt – zuerst Android veröffentlichen"; exit 1; }
+          gh release upload "v$V" "hoch/$D"
+          curl -fsSL "https://github.com/${{ github.repository }}/releases/download/v$V/$D" | sha256sum | grep -q "$(sha256sum "hoch/$D" | cut -d' ' -f1)"
+          echo "Am Release: v$V/$D"
