@@ -1,5 +1,5 @@
 // Offline-Vorrat von PseudoDoc: nur die App selbst, nie Nutzerdateien. Neue Fassung = neue Nummer.
-const VORRAT = "pseudodoc-v2";
+const VORRAT = "pseudodoc-v3";
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VORRAT).then((c) => c.addAll(["./", "./index.html", "./manifest.webmanifest", "./pseudodoc.svg", "./pseudodoc-192.png", "./pseudodoc-512.png", "./datenschutz.html", "./vendor/maske/25_pseudonym.js"])).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((n) => n.startsWith("pseudodoc-v") && n !== VORRAT).map((n) => caches.delete(n)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", (e) => {

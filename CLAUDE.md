@@ -77,5 +77,6 @@ gehen in PseudoDoc auf. Startseite mit drei Wegen (`StartSeite` in `src/app.tsx`
   Zuordnung). Original bleibt unverändert. Kein Virenscanner – das steht auf beiden Seiten.
 - `data-beispiel` steht auf der Startseite (die nativen Proben klicken es); der Knopf in „Zur KI“ heißt `data-beispiel-hin`.
 - Proben: Kern 80, Oberfläche 64, native 67, Windows-Engine 64. Am Gerät ungeprüft. APK/Windows 0.2.0 nur mit Klaus' Wort.
-- ⚠ Offen: `manifest.webmanifest` trägt `"id": "./"` – Chrome rechnet das laut Mixarium-Messung vom Ursprung aus (Kollision mit anderen
-  Apps auf github.io möglich). Nicht geändert, weil es die Kennung schon installierter Web-Apps änderte; mit Klaus klären.
+- Manifest-Kennung (Klaus 26.11.: „gleich angleichen“): `"id": "/PseudoDoc/app/"` statt `"./"` (das rechnet Chrome vom Ursprung aus,
+  dieselbe Kennung wie andere Apps auf github.io). Wer die Web-App schon installiert hatte, installiert sie einmal neu. Vorrat `pseudodoc-v3`.
+  Probe in `test-native.mjs`.
