@@ -57,3 +57,10 @@ kleine Zahlen in Java-Plugins (Lehre der Familienakte).
 - **Codex ist außen vor** (Klaus 14.11.: „Vergiss Codex, arbeite alleine“) – keine Codex-Prüfungen anstoßen oder abwarten.
 - Forschungseinträge nur nach KimHub. Eigene geprüfte PRs (CI grün) selbst mergen; APK/Windows-Ausgaben nur mit Klaus' Wort.
 - Jede Sitzung endet mit einem Abschlussbrief `docs/BRIEF_ABSCHLUSS_<Datum>_….md` (Stundennachweis, Startauftrag als Codeblock).
+
+## Windows-Installer am GitHub-Release (Klaus 2026-11-26)
+
+Der Marktplatz Spezial (family-project `server/spezial/`) holt APK und Installer vom **GitHub-Release** `v<Fassung>`. Der
+Installer 0.1.0 lag nur auf `family-projekt.de/updates/pseudodoc/`. Seitdem hängt `windows-release.yml` ihn zusätzlich an das
+Release (nach Android, sonst Abbruch); für 0.1.0 einmalig `windows-an-release.yml` (holt die Datei vom Update-Server, prüft sie gegen
+die SHA-256 im Nachweis, hängt sie an – kein neuer Bau, keine neue Fassung).

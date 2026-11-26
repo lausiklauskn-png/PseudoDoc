@@ -1,0 +1,41 @@
+name: Veröffentlichten Windows-Installer an das GitHub-Release hängen
+
+# Einmalig für 0.1.0 (Klaus 2026-11-26): der Installer wurde am 14.11. nur auf family-projekt.de/updates/pseudodoc/ gelegt,
+# der Marktplatz Spezial liest aber das GitHub-Release. Nichts wird neu gebaut oder neu ausgegeben: dieselbe Datei wird
+# vom Update-Server geholt, gegen die SHA-256 im Nachweis docs/VEROEFFENTLICHUNG-<Fassung>.json geprüft und angehängt.
+# Ab 0.1.1 erledigt das windows-release.yml selbst.
+on:
+  workflow_dispatch:
+    inputs:
+      fassung:
+        description: 'Fassung mit Nachweis, z. B. 0.1.0'
+        required: true
+      bestaetigung:
+        description: 'Klaus hat es freigegeben (genau "ja")'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  anhaengen:
+    if: ${{ github.event.inputs.bestaetigung == 'ja' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Holen, gegen den Nachweis prüfen, anhängen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ github.event.inputs.fassung }}
+        run: |
+          set -euo pipefail
+          [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::Fassung ungültig"; exit 1; }
+          N="docs/VEROEFFENTLICHUNG-$V.json"; test -f "$N"
+          D=$(node -p "require('./$N').windows.datei"); S=$(node -p "require('./$N').windows.sha256"); U=$(node -p "require('./$N').windows.server")
+          curl -fsSL "$U" -o "$D"
+          echo "$S  $D" | sha256sum -c -
+          gh release view "v$V" >/dev/null
+          if gh release view "v$V" --json assets --jq '.assets[].name' | grep -qx "$D"; then echo "schon angehängt"; else gh release upload "v$V" "$D"; fi
+          curl -fsSL "https://github.com/${{ github.repository }}/releases/download/v$V/$D" | sha256sum | grep -q "$S"
+          echo "Am Release: v$V/$D (SHA-256 $S)"
