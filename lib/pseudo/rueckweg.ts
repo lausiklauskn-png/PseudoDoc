@@ -1,7 +1,7 @@
 // Rückweg prüfen (Klaus 26.11.2026: „ob ich beim Zurückweg auch Fehler gemacht habe … raus und wieder rein“).
 // Reine Rechnung, ohne Browser: was die KI mit den Platzhaltern gemacht hat und was sie Neues hineingeschrieben hat.
 // Die Prüfung auf Anweisungen an eine KI und versteckten Text macht der Prüfkern in der Oberfläche (src/bericht.ts).
-import { UNSICHTBAR } from "./auftrag.ts";
+import { UNSICHTBAR } from "./zeichen.ts";
 
 export type Stufe = "achtung" | "hinweis" | "ok";
 export type Punkt = { stufe: Stufe; kennung: string; satz: string };

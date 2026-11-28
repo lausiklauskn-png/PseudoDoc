@@ -33,10 +33,9 @@ export type Stueck = {
   warnung?: string[];       // Prüfkern: versteckte KI-Anweisung, unsichtbarer Text, Makro … (bleibt auf dem Gerät)
 };
 
-/** Unsichtbare Zeichen (Nullbreite, Richtungswechsel, weiches Trennzeichen, Unicode-Tags): können versteckte Kennungen oder
- *  Anweisungen tragen und gehen nie mit hinaus. Normale Leer- und Zeilenumbrüche bleiben. */
-export const UNSICHTBAR = /[\u00AD\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF]|[\u{E0000}-\u{E007F}]/gu;
-export const sauber = (t: string) => t.replace(UNSICHTBAR, "").normalize("NFC");
+// Unsichtbare Zeichen: eigene Datei, damit Rückweg-Prüfung und Familienakte sie ohne die Maske übernehmen können (28.11.2026).
+export { UNSICHTBAR, sauber } from "./zeichen.ts";
+import { sauber } from "./zeichen.ts";
 
 export const kennung = (i: number) => `D${String(i + 1).padStart(2, "0")}`;
 
