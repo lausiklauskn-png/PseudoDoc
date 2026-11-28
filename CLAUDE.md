@@ -10,6 +10,8 @@ Antwort zurück → echte Angaben wieder drin. **Einfach in der Bedienung, höch
 „Einfach bedeutet nicht niedriger Standard … höher als die Familienakte“). Teil der Pro-App-Familie: Basic = Web-App (Pages),
 **Pro = Android/Windows** (**0.2.0 veröffentlicht 26.11., nicht erneut ausgeben; nächste 0.2.1**, Nachweise `docs/VEROEFFENTLICHUNG-0.2.0.json`, `-0.1.0.json`; Symbol = Maske mit 3D-Schatten; alles in `docs/PRO.md`). Verbindung zu anderen Apps vorbereitet, nicht eingeschaltet.
 
+**PseudoDoc ist Kern für „Mit großer KI sortieren“ (Klaus 28.11.2026):** gebaut wird im Datei-Organizer, der `lib/pseudo/` von hier byte-gleich mit Pin übernimmt. Kern ohne Oberfläche lassen, Änderungen im Abschlussbrief nennen. [Teilauftrag](docs/BRIEF_SITZUNG_2026-11-29_SORTIEREN-MIT-GROSSER-KI.md).
+
 Adresse: https://lausiklauskn-png.github.io/PseudoDoc/ (leitet auf `app/`). Plan, Stand, Fragen: `docs/PLAN.md`.
 
 ## Aufbau
