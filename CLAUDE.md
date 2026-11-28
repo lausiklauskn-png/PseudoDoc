@@ -2,6 +2,8 @@
 
 Diese Datei liest jede Sitzung zuerst.
 
+**Codex ist raus (Klaus 28.11.2026: „Codex braucht nicht mehr geprüft werden … Codex ist raus“):** keine Codex-Prüfungen anstoßen, Codex-Kommentare an PRs („Review failed“, „usage limits“) nicht abwarten und nicht als Befund behandeln; auch Codex als unabhängiger Prüfer (Briefkasten) ruht. Gilt für jede Sitzung in allen Repos der Gruppe.
+
 ## Was das ist
 
 **PseudoDoc** (Klaus 14.11.2026): Datei rein → pseudonymisiert (Text: Platzhalter ⟦NAME-1⟧ …, Bilder: frei gesetzte 100 % schwarze
